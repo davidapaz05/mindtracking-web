@@ -1,8 +1,9 @@
+import Header from "./components/Header"
 
 export default function Home() {
   return (
     <div>
-      <button>Abrir</button>
+      <Header/>
     </div>
   );
 }
