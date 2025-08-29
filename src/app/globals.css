@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@layer base {
+  html {
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  /* Transições suaves para mudança de tema */
+  * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Tema escuro global */
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html.dark body {
+    background-color: #111827; /* bg-gray-900 */
+    color: #ffffff;
+  }
+
+    html.dark .flex.min-h-screen {
+    background-color: #111827; /* bg-gray-900 */
+  }
+
+}
