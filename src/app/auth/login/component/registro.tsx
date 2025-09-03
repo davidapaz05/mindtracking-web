@@ -252,6 +252,7 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
 
   // Funções de validação
   const validateEmail = (email: string) => {
+<<<<<<< HEAD
     if (!email) return 'Email é obrigatório';
 
     // Remove espaços em branco
@@ -284,6 +285,14 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
     // Não pode conter caracteres especiais proibidos
     if (/[,;<>()[\]{}]/.test(trimmed)) return 'Email contém caracteres inválidos';
 
+=======
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const domainRegex = /@(gmail|hotmail|outlook|yahoo|icloud|protonmail|live|aol|zoho|yandex|mail)\./i;
+    
+    if (!email) return 'Email é obrigatório';
+    if (!emailRegex.test(email)) return 'Email inválido';
+    if (!domainRegex.test(email)) return 'Use um email válido (Gmail, Hotmail, Outlook, etc.)';
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
     return '';
   };
 
@@ -318,6 +327,7 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
   const validateBirthDate = (dateStr: string) => {
     if (!dateStr) return 'Data de nascimento é obrigatória';
     if (dateStr.length !== 8) return 'Data de nascimento inválida';
+<<<<<<< HEAD
 
     const day = parseInt(dateStr.substring(0, 2));
     const month = parseInt(dateStr.substring(2, 4));
@@ -331,13 +341,31 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
     const minDate = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
     const maxDate = new Date(2012, 11, 31); // 31/12/2012
 
+=======
+    
+    const day = parseInt(dateStr.substring(0, 2));
+    const month = parseInt(dateStr.substring(2, 4));
+    const year = parseInt(dateStr.substring(4, 8));
+    
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day);
+    const minDate = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
+    const maxDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+    
+    // Validação básica de data
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
     if (isNaN(birthDate.getTime())) return 'Data de nascimento inválida';
     if (day < 1 || day > 31) return 'Dia inválido';
     if (month < 1 || month > 12) return 'Mês inválido';
     if (year < 1900) return 'Ano inválido';
     if (birthDate < minDate) return 'Data de nascimento inválida';
+<<<<<<< HEAD
     if (birthDate > maxDate) return 'Você deve ter pelo menos 12 anos para se cadastrar';
 
+=======
+    if (birthDate > maxDate) return 'Você deve ter pelo menos 12 anos';
+    
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
     return '';
   };
 
@@ -364,17 +392,27 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
 
   // Handlers para os campos - CORRIGIDO
   const handleInputChange = (field: keyof typeof formData) => (value: string) => {
+<<<<<<< HEAD
     const sanitizedValue = removeEmojis(value);
     setFormData(prev => ({ ...prev, [field]: sanitizedValue }));
 
+=======
+    setFormData(prev => ({ ...prev, [field]: value }));
+    
+    // Limpar erro do campo quando o usuário começar a digitar
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
     if (errors[field as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
 
   const handleGenderChange = (value: string) => {
+<<<<<<< HEAD
     const sanitizedValue = removeEmojis(value);
     setSelectedGender(sanitizedValue);
+=======
+    setSelectedGender(value);
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
     if (errors.gender) {
       setErrors(prev => ({ ...prev, gender: '' }));
     }
@@ -530,6 +568,7 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
     };
   }, [showMessage, step]);
 
+<<<<<<< HEAD
   // Função para remover emojis
   function removeEmojis(str: string) {
     // Regex para remover a maioria dos emojis
@@ -539,6 +578,8 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
     );
   }
 
+=======
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
   if (!isOpen) return null;
 
   return (
@@ -547,6 +588,7 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
 
         {/* Cabeçalho com botão de fechar à esquerda e logo à direita */}
         <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-50">
+<<<<<<< HEAD
           {/* Botão Fechar - Esquerda (sempre visível) */}
           <button
             className="w-10 h-10 right-12 absolute top-5 rounded-full text-white cursor-pointer flex items-center justify-center"
@@ -568,6 +610,24 @@ export default function SignupModal({ onClose, onOpenModal1, onBackToLogin }: Si
             </button>
           )}
 
+=======
+          {/* Botão Voltar - Esquerda */}
+          <button
+            className="w-10 h-10 absolute top-5 rounded-full text-white cursor-pointer flex items-center justify-center"
+            aria-label="Voltar"
+            onClick={handleVoltar}
+          >
+            <Image src="/images/voltar.svg" alt="Voltar" width={30} height={32} />
+          </button>
+          <button
+            className="absolute top-4 right-4 w-13 h-13 rounded-full text-white  flex items-center justify-center z-50 font-inter cursor-pointer"
+            aria-label="Fechar"
+            onClick={handleClose}
+          >
+            <Image src="/images/fechar.svg" alt="Fechar" width={50} height={32} />
+          </button>
+          
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
           {/* Logo - Direita (visível apenas em mobile) */}
           <div className="md:hidden w-12">
             <Image src="/images/logo.svg" alt="Logo" width={48} height={48} className="h-auto w-full" />

@@ -140,6 +140,7 @@ export default function InputField({
       {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
     </div>
   );
+<<<<<<< HEAD
 }
 
 // Função utilitária para validação completa de email
@@ -189,4 +190,6 @@ export function validateEmailFull(email: string): string {
   if (domain && domain.split('.').some(part => part.length < 2)) return 'Email inválido';
 
   return '';
+=======
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
 }

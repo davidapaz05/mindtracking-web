@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 
 import React, { useState } from 'react';
@@ -46,6 +47,17 @@ export default function Page() {
           }}
         />
       )}
+=======
+'use client';
+
+import React, { useState } from 'react';
+
+export default function Page() {
+
+  return (
+    <div >
+      
+>>>>>>> de934e0de3e0349d82bcff4586aa5ee867b6ba93
     </div>
   );
 }
