@@ -1,0 +1,50 @@
+name: Build and Deploy MindTrack Web
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t mindtrack/mindtracking-web:latest .
+
+      - name: Push Docker image
+        run: docker push mindtrack/mindtracking-web:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Create Docker network (if not exists)
+        run: |
+          if ! docker network inspect mindtrack-net &> /dev/null; then
+            docker network create mindtrack-net;
+          fi
+
+      - name: Stop and remove old container (if running)
+        run: |
+          docker stop mindtracking-web || true
+          docker rm mindtracking-web || true
+
+      - name: Pull latest frontend image
+        run: docker pull mindtrack/mindtracking-web:latest
+
+      - name: Run frontend container
+        run: |
+          docker run -d \
+            --restart always \
+            --name mindtracking-web \
+            --network mindtrack-net \
+            -p 80:3000 \
+            mindtrack/mindtracking-web:latest
