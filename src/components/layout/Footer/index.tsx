@@ -7,12 +7,8 @@ export default function Footer() {
   const { darkMode } = useTheme();
 
   return (
-    <>
-      <div className="pb-0 lg:pb-[250px]"></div>
-
-      <footer
-        className={`bottom-0 left-0 w-full border-t-2 border-blue-600 transition-colors duration-500 z-50
-        relative lg:fixed
+    <footer
+        className={`w-full border-t-2 border-blue-600 transition-colors duration-500
         ${darkMode ? "text-white" : "text-gray-900"}`}
       >
         <div className="max-w-screen-xl mx-auto flex flex-col px-6 sm:px-12 md:px-[150px] py-[50px]">
@@ -29,16 +25,6 @@ export default function Footer() {
 
           {/* Conteúdo principal */}
           <div className="flex flex-col h-full md:grid md:grid-cols-2 lg:flex lg:flex-row w-full gap-6 mb-6 md:mb-0">
-
-            {/* Explore */}
-            <div className="flex flex-col space-y-4 w-full sm:w-full lg:w-[20%] md:w-full">
-              <h2 className="font-semibold text-xl">Explore</h2>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm hover:text-blue-600">Home</a></li>
-                <li><a href="#" className="text-sm hover:text-blue-600">Blog</a></li>
-                <li><a href="#" className="text-sm hover:text-blue-600">Questões</a></li>
-              </ul>
-            </div>
 
             {/* Contato */}
             <div className="flex flex-col space-y-4 w-full sm:w-full md:w-full lg:w-1/4">
@@ -177,6 +163,5 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-    </>
   );
 }

@@ -6,7 +6,7 @@ import { ThemeProvider } from "../contexts/ThemeContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mind Tracking",
+  title: "MindTracking",
   description: "Acompanhe suas emoções e pensamentos.",
 };
 
@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={inter.className}>
+      <body className={`${inter.className} overflow-x-hidden`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
