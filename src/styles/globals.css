@@ -24,5 +24,15 @@
     html.dark .flex.min-h-screen {
     background-color: #111827; /* bg-gray-900 */
   }
+  /* Chrome, Safari e Edge */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
 
 }
