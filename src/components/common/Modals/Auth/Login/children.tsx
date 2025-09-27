@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { login as loginApi } from "@/lib/api/auth";
 import { useTheme } from "@/contexts/ThemeContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +17,8 @@ export default function Login() {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -40,27 +44,43 @@ export default function Login() {
   };
 
   const handleLoginClick = async () => {
+    setApiError(null);
     // Validações finais antes de enviar
     const emailValidation = validateEmail(email);
     if (emailValidation) {
       setEmailError(emailValidation);
       return;
     }
-
     if (!password) {
       setPasswordError("Senha obrigatória");
       return;
     }
-
-    // Se passou nas validações, faz o login
     setLoading(true);
     try {
-      console.log("Login permitido com:", { email, password });
-      // await api.login({ email, password });
-      // Simulando uma requisição assíncrona
-      await new Promise(resolve => setTimeout(resolve, 2000));
-    } catch (error) {
-      console.error("Erro no login:", error);
+      const res = await loginApi(email, password);
+      // Armazena token e user
+      localStorage.setItem("mt_token", res.token);
+      sessionStorage.setItem("mt_token", res.token);
+      if (res.user) {
+        localStorage.setItem("mt_user", JSON.stringify(res.user));
+        sessionStorage.setItem("mt_user", JSON.stringify(res.user));
+      }
+      // Redireciona conforme questionario_inicial
+      if (res.user && typeof res.user === "object" && "questionario_inicial" in res.user) {
+        if ((res.user as any).questionario_inicial === false) {
+          router.push("/Questionnaire");
+        } else {
+          router.push("/dashboard");
+        }
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error: any) {
+      setApiError(
+        error?.response?.data?.message ||
+        error?.message ||
+        "Erro ao fazer login. Tente novamente."
+      );
     } finally {
       setLoading(false);
     }
@@ -69,6 +89,9 @@ export default function Login() {
   return (
     <div>
       <div className="flex flex-col items-center justify-between w-full md:w-[28.125em] gap-4">
+        {apiError && (
+          <div className="w-full text-center text-red-500 text-sm mb-2">{apiError}</div>
+        )}
         <Image
           src={
             theme === "dark"

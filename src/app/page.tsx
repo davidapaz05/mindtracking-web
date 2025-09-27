@@ -9,7 +9,11 @@ import { useState } from "react";
 import Modal from "@/components/common/Modals/Auth/Login";
 import Login from "@/components/common/Modals/Auth/Login/children";
 import Register from "@/components/common/Modals/Auth/Register/children";
-import { text } from "stream/consumers";
+import Header from "@/components/layout/Header";
+import Image from "next/image";
+import Button from "@/components/common/Buttons";
+import DarkModeToggle from "@/components/common/ButtonColors";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   const { darkMode, toggleTheme } = useTheme();
@@ -60,6 +64,7 @@ export default function Home() {
               alt="Athena pulando"
               width={250}
               height={200}
+              priority
             />
           </Modal>
 
