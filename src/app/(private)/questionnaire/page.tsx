@@ -1,5 +1,4 @@
 "use client";
-import Sidebar from '@/components/layout/Sidebar';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -70,8 +69,7 @@ const Questionnaire = ({ theme }: QuestionnaireProps) => {
 
   return (
     <div className={`flex-1 flex justify-center items-center min-h-screen max-h-screen overflow-hidden ${bgPrimary} transition-colors duration-200`}>
-      <Sidebar />
-      <div className="w-full max-w-[90rem] px-4 md:px-12 lg:px-2 pt-20 lg:pb-6 lg:px-[80px] md:pb-80 mx-auto space-y-8">
+      <div className="w-full max-w-[90rem] px-4 md:px-12 pt-20 lg:pb-6 lg:px-[80px] md:pb-80 mx-auto space-y-8">
 
         {/* Barra de Progresso */}
         <section className="mb-6 md:mb-4">
