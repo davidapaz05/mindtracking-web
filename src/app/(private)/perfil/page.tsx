@@ -23,8 +23,8 @@ export default function PerfilPage() {
 
   const cardClasses = `
     rounded-2xl shadow-xl overflow-hidden 
-    transition-colors duration-300
-    ${darkMode ? "bg-slate-800 text-white" : "bg-slate-50 text-gray-900"}
+    transition-colors duration-700
+    ${darkMode ? "bg-slate-800 text-white" : "bg-slate-50 text-gray-900 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.10)]"}
   `;
 
   const fieldClasses = `
@@ -83,25 +83,28 @@ export default function PerfilPage() {
 
         {/* Botões responsivos */}
         <div className="mt-6 md:mt-0 ml-auto z-10 w-full md:w-auto flex flex-col md:flex-row gap-2 md:gap-3">
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          {/* Mobile: azul em cima, vermelho embaixo. Desktop/tablet: todos na mesma linha */}
+          <div className="w-full flex flex-col gap-2 sm:flex-row sm:gap-3">
+            <div className="flex flex-row gap-2 w-full">
+              <button
+                className="min-w-[120px] w-full sm:w-auto bg-blue-600 px-6 py-0.5 h-9 rounded-full font-bold hover:bg-blue-700 text-white whitespace-nowrap text-center"
+                onClick={() => setModalOpen(true)}
+              >
+                Editar Perfil
+              </button>
+              <ButtonEsqueceuSenha 
+                className="min-w-[120px] w-full sm:w-auto bg-blue-600 px-6 py-0.5 h-9 rounded-full font-bold hover:bg-blue-700 text-white whitespace-nowrap flex items-center justify-center"
+              >
+                Redefinir Senha
+              </ButtonEsqueceuSenha>
+            </div>
             <button
-              className="bg-blue-600 px-8 py-1.5 rounded-full font-bold hover:bg-blue-700 w-full sm:w-auto"
-              onClick={() => setModalOpen(true)}
+              className="min-w-[120px] w-full bg-red-600 px-6 py-0.5 h-9 rounded-full font-bold hover:bg-red-700 text-white whitespace-nowrap text-center mx-auto"
+              onClick={() => setLogoutModalOpen(true)}
             >
-              Editar Perfil
+              Sair da Conta
             </button>
-            <ButtonEsqueceuSenha 
-              className="bg-blue-600 px-5 py-1.5 rounded-full font-bold hover:bg-blue-700 w-full sm:w-auto"
-            >
-              Redefinir Senha
-            </ButtonEsqueceuSenha>
           </div>
-          <button
-            className="bg-red-600 px-7 py-1.5 rounded-full font-bold hover:bg-red-700 w-full sm:w-auto"
-            onClick={() => setLogoutModalOpen(true)}
-          >
-            Sair da Conta
-          </button>
         </div>
 
         {/* Modais */}
@@ -177,8 +180,8 @@ export default function PerfilPage() {
       {/* Layout desktop com sidebar lateral */}
       <div className="hidden sm:flex min-h-screen">
         <Sidebar />
-        <div className="flex-1 flex items-center justify-center px-4 md:px-8 pt-10 md:pt-14 pb-10">
-          <div className="w-full max-w-5xl">{ProfileCard}</div>
+  <div className="flex-1 flex items-center justify-center px-4 md:px-8 pt-10 md:pt-14 pb-10 md:justify-center ml-0 lg:ml-37.5">
+          <div className="w-full max-w-5xl mx-auto">{ProfileCard}</div>
         </div>
       </div>
 

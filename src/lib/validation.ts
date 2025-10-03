@@ -146,6 +146,7 @@ export function validateName(name: string): string | null {
   if (!isAsciiOnly(name)) return "O nome não pode conter emoji";
   if (trimmed.length < 2) return "Nome muito curto (mínimo 2 caracteres)";
   if (trimmed.length > 150) return "Nome muito longo (máximo 150 caracteres)";
+  if (/[0-9]/.test(trimmed)) return "O nome não pode conter números";
   if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/.test(trimmed)) return "Nome contém caracteres inválidos";
   return null;
 }

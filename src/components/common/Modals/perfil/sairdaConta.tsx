@@ -18,32 +18,35 @@ export default function LogoutModal({ isOpen, onClose, onLogout }: LogoutModalPr
 
   const isDark = theme === 'dark';
 
-  // Cores dinâmicas
-  const bgColor = isDark ? 'bg-gray-900' : 'bg-white';
+  // Cancel button color based on theme
+  const cancelBtnBg = isDark ? 'bg-slate-700 text-white' : 'bg-gray-300 text-gray-700';
+
+  // Cores dinâmicas apenas para texto e botões, sem bg explícito
   const titleColor = isDark ? 'text-white' : 'text-gray-900';
   const descriptionColor = isDark ? 'text-gray-300' : 'text-gray-500';
-  const cancelBtnBg = isDark ? 'bg-slate-800 hover:bg-slate-900' : 'bg-gray-200 hover:bg-gray-300';
-  const cancelBtnText = isDark ? 'text-gray-300' : 'text-gray-700';
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
-      {/* Modal com fundo dinâmico e responsivo */}
+      {/* Modal sem cor de fundo explícita, acompanha o background da tela */}
       <div
-        className={`relative w-full max-w-lg px-4 sm:px-6 py-6 mx-auto rounded-lg sm:rounded-2xl text-center shadow-lg ${bgColor}`}
+        className={
+          `relative w-full max-w-lg px-4 sm:px-6 py-6 mx-auto rounded-lg sm:rounded-2xl text-center shadow-lg ` +
+          (isDark ? 'bg-slate-800' : 'bg-slate-50')
+        }
       >
         {/* Botão fechar */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-full dark:hover:bg-gray-700"
+          className="absolute top-4 right-4 p-1 rounded-full"
           aria-label="Fechar"
         >
           <img src={icons.fechar} alt="Fechar" className="w-10 h-10" />
         </button>
 
         {/* Ícone sair */}
-        <div className="flex justify-center mb-4 mt-6">
-          <div className="w-12 h-12 flex items-center justify-center">
-            <img src={icons.sair} alt="Sair" className="w-20 h-20" />
+        <div className="flex justify-center mb-2 mt-6">
+          <div className="w-14 h-14 flex items-center justify-center">
+            <img src={icons.sair} alt="Sair" className="w-14 h-14" />
           </div>
         </div>
 
@@ -62,7 +65,7 @@ export default function LogoutModal({ isOpen, onClose, onLogout }: LogoutModalPr
           <button
             type="button"
             onClick={onClose}
-            className={`px-6 py-2 rounded-full font-inter font-semibold transition-colors ${cancelBtnBg} ${cancelBtnText}`}
+            className={`px-6 py-2 rounded-full font-inter font-semibold transition-colors duration-200 hover:brightness-90 ${cancelBtnBg}`}
           >
             Cancelar
           </button>
