@@ -149,27 +149,28 @@ export default function PerfilPage() {
 
       <hr className={`my-4 mx-6 mb-0 border-t ${darkMode ? "border-gray-600" : "border-gray-300"}`} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-6 py-6">
-        <div className={fieldClasses}>
-          <p className="text-sm">Gênero</p>
-          <p className="text-lg font-semibold">Masculino</p>
+        <div className="px-6 md:px-8 lg:-mx-8 xl:-mx-2 2xl:-mx-2 gap-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 lg:gap-12 lg:gap-x-14 py-8">
+            <div className={fieldClasses}>
+              <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">Gênero</p>
+              <p className="text-lg text-white font-semibold">Masculino</p>
+            </div>
+            <div className={fieldClasses}>
+              <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">Idade</p>
+              <p className="text-lg text-white font-semibold">28 Anos</p>
+            </div>
+            <div className={fieldClasses}>
+              <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">Telefone</p>
+              <p className="text-lg text-white font-semibold">(11) 99999-9999</p>
+            </div>
+            <div className={fieldClasses}>
+              <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">E-mail</p>
+              <p className="text-lg text-white font-semibold">joao@email.com</p>
+            </div>
+          </div>
         </div>
-        <div className={fieldClasses}>
-          <p className="text-sm">Idade</p>
-          <p className="text-lg font-semibold">28 Anos</p>
-        </div>
-        <div className={fieldClasses}>
-          <p className="text-sm">Telefone</p>
-          <p className="text-lg font-semibold">(11) 99999-9999</p>
-        </div>
-        <div className={fieldClasses}>
-          <p className="text-sm">E-mail</p>
-          <p className="text-lg font-semibold">joao@email.com</p>
-        </div>
-      </div>
     </div>
   );
-
   return (
     <div className="min-h-screen transition-colors duration-300 bg-transparent">
       {/* Sidebar fixa no topo em mobile */}
