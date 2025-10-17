@@ -46,7 +46,7 @@ export default function Diario() {
   }, []);
 
   return (
-    <div className="h-screen overflow-y-auto lg:ml-37.5 md:mt-20 mt-25 lg:mt-0">
+    <div className="h-screen overflow-y-auto md:mt-20 mt-25 lg:mt-0">
       <Sidebar />
       <div className="w-full p-6 md:p-10">
         <h1
