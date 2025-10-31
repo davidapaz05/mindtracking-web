@@ -272,17 +272,17 @@ export default function Athena() {
 
   return (
     <div
-      className={`w-full h-screen flex flex-col ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}
+      className={`w-full  h-screen flex flex-col justify-center align-center ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}
     >
       {/* Área das Mensagens - Scroll Independente */}
-      <div className="flex-1 mt-10 overflow-hidden pt-20 lg:pt-4">
+      <div className="flex-1 w-full pl-0 lg:pl-37.5 mt-10 overflow-hidden pt-20 lg:pt-4">
         <div
-          className="h-full overflow-y-auto p-2 sm:p-4"
+          className="flex h-full w-full overflow-y-auto p-2 sm:p-4 justify-center items-center"
           ref={chatContainerRef}
         >
           {messages.length === 0 ? (
-            <div className="flex flex-col lg:flex-row items-center justify-center h-full gap-4 lg:gap-8 px-4">
-              <div className="flex-shrink-0 order-1 lg:order-none">
+            <div className="flex flex-col lg:flex-row justify-center items-center h-full mx-auto gap-4 lg:gap-8 px-4">
+              <div className="flex flex-shrink-0 order-1 lg:order-none items-center justify-center">
                 <Image
                   src="/images/AthenaAcenando.png"
                   alt="Athena"
@@ -401,7 +401,7 @@ export default function Athena() {
       </div>
 
       {/* Input de Mensagem - Fixo na parte inferior */}
-      <div className={`flex-shrink-0 p-2 sm:p-4 pb-4 lg:pb-4 `}>
+      <div className={`flex-shrink-0 ml-0 lg:ml-37.5 pb-4 lg:pb-4 `}>
         <div className="max-w-4xl mx-auto">
           {/* Carrossel de mensagens sugeridas durante o chat */}
           {messages.length > 0 && (

@@ -13,7 +13,6 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import { setAuthToken } from "@/lib/api/axios";
 
 interface DadosGrafico {
   name: string;

@@ -40,7 +40,7 @@ export default function PerfilPage() {
 
   const [fotoPerfilUrl, setFotoPerfilUrl] = useState<string | null>(null);
   const [fotoFundoUrl, setFotoFundoUrl] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [, setUploading] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {

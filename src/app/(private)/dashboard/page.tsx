@@ -54,7 +54,7 @@ export default function Dashboard() {
             estatisticasResponse?.data?.estatisticas?.total_questionarios || 0,
           loading: false,
         });
-      } catch (error) {
+      } catch {
         setQuestionarioStatus({
           respondeuHoje: false,
           respondidos: 0,
