@@ -356,7 +356,7 @@ export default function Athena() {
                     {message.sender === "athena" ? (
                       <FormattedText text={message.content} />
                     ) : (
-                      <p className="text-xs sm:text-sm leading-relaxed">
+                      <p className="text-xs sm:text-sm !leading-relaxed">
                         {message.content}
                       </p>
                     )}

@@ -221,7 +221,7 @@ export default function DiarioClient() {
                             </span>
                           </div>
                         </div>
-                        <p className="text-sm mb-4 font-inter leading-relaxed text-left whitespace-pre-line overflow-hidden text-ellipsis">
+                        <p className="text-sm mb-4 font-inter !leading-relaxed text-left whitespace-pre-line overflow-hidden text-ellipsis">
                           {truncateText(card.description)}
                         </p>
                         {card.analysis && (

@@ -19,7 +19,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       <div
         className={`${
           theme === "dark" ? "bg-slate-800 text-white" : "bg-white text-black"
-        } rounded-[12px] p-4 sm:p-6 md:p-8 relative
+        } rounded-[12px] p-4 sm:p-6 md:p-8 relative md:w-[28.125em]
          max-h-[90vh] w-[90%] max-w-[1066px] h-auto
          min-h-[min(550px,80vh)]
          sm:min-h-[min(550px,80vh)]

@@ -37,7 +37,7 @@ export default function NotFound() {
             <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-4xl font-bold mb-5">
               Você se perdeu na jornada!
             </h2>
-            <p className="text-sm sm:text-[16px] md:text-[28px] lg:text-[22px] mb-8 leading-relaxed max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-2xl mx-auto lg:mx-0">
+            <p className="text-sm sm:text-[16px] md:text-[28px] lg:text-[22px] mb-8 !leading-relaxed max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-2xl mx-auto lg:mx-0">
               A conexão com esta página foi perdida, mas nossa jornada juntos
               continua. Vamos nos reconectar ao seu espaço.
             </p>
@@ -65,7 +65,7 @@ export default function NotFound() {
             <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-4xl font-bold mb-5">
               Você se perdeu na jornada!
             </h2>
-            <p className="text-sm sm:text-[16px] md:text-[28px] lg:text-[22px] mb-8 leading-relaxed max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-2xl mx-auto lg:mx-0">
+            <p className="text-sm sm:text-[16px] md:text-[28px] lg:text-[22px] mb-8 !leading-relaxed max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-2xl mx-auto lg:mx-0">
               Oops! Parece que esta página se perdeu nos pensamentos. Não se
               preocupe, estou aqui para te guiar de volta.
             </p>

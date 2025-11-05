@@ -27,13 +27,13 @@ export default function Home() {
       <section className="flex flex-col lg:flex-row height-[544px] w-full md:max-w-[1150px] mt-0 self-stretch m-auto items-center justify-between text-slate-900 gap-[24px]">
         <div className="flex flex-col w-full lg:w-[47em] items-center lg:items-start gap-[24px] md:gap-[2.56em] px-8 lg:pl-[3.745em]">
           <h1
-            className={`text-2xl md:text-4xl lg:text-6xl text-center lg:text-start font-bold leading-snug w-full ${darkMode ? "text-slate-50" : "text-slate-900"}`}
+            className={`text-2xl md:text-4xl lg:text-6xl text-center lg:text-start font-bold !leading-snug w-full ${darkMode ? "text-slate-50" : "text-slate-900"}`}
           >
             Cuide da sua mente com MindTracking
           </h1>
 
           <p
-            className={`text-base lg:text-lg md:text-xl text-center lg:text-start font-semibold leading-snug ${darkMode ? "text-slate-50" : "text-slate-900"}`}
+            className={`text-base lg:text-lg md:text-xl text-center lg:text-start font-semibold !leading-snug ${darkMode ? "text-slate-50" : "text-slate-900"}`}
           >
             Bem-vindo ao MindTracking! Aqui, você pode monitorar seu bem-estar
             emocional e mental de forma simples e eficaz
@@ -134,14 +134,14 @@ export default function Home() {
       <section className="flex flex-col height-[544px] w-full md:max-w-[1150px] mt-16 self-stretch m-auto items-center justify-between text-slate-900 gap-12 px-8 lg:px-12">
         <div className="flex flex-col gap-8 items-center justify-center">
           <h1
-            className={`max-w-[788px] font-bold text-2xl md:text-4xl lg:text-6xl leading-snug text-center ${
+            className={`max-w-[788px] font-bold text-2xl md:text-4xl lg:text-6xl !leading-snug text-center ${
               darkMode ? "text-slate-50" : "text-slate-900"
             }`}
           >
             Como a MindTracking transforma seu bem-estar
           </h1>
           <p
-            className={`font-medium md:font-semibold text-base md:text-2xl leading-snug text-center ${
+            className={`font-medium md:font-semibold text-base md:text-2xl !leading-snug text-center ${
               darkMode ? "text-slate-50" : "text-slate-900"
             }`}
           >
@@ -172,14 +172,14 @@ export default function Home() {
       <section className="flex flex-col height-[544px] w-full md:max-w-[1150px] mt-24 self-stretch m-auto items-center justify-between gap-12 px-8 lg:px-0">
         <div className="flex flex-col gap-8 text-center lg:text-start items-center lg:items-start">
           <h1
-            className={`w-full md:w-full md:max-w-full lg:max-w-[13em] font-bold text-2xl md:text-4xl lg:text-6xl leading-snug ${
+            className={`w-full md:w-full md:max-w-full lg:max-w-[13em] font-bold text-2xl md:text-4xl lg:text-6xl !leading-snug ${
               darkMode ? "text-slate-50" : "text-slate-900"
             }`}
           >
             Descubra os benefícios do MindTracking
           </h1>
 
-          <p className="text-[1em] md:text-[1.3214rem] font-semibold leading-snug">
+          <p className="text-[1em] md:text-[1.3214rem] font-semibold !leading-snug">
             Acompanhe seu bem-estar emocional de forma prática e intuitiva.
             Receba insights personalizados que ajudam você a entender melhor
             suas emoções.
@@ -203,13 +203,13 @@ export default function Home() {
 
       <section className="flex flex-col height-[544px] w-full md:max-w-[1150px] mt-10 self-stretch m-auto items-center justify-between gap-12 px-8 lg:px-0">
         <h1
-          className={`text-2xl md:text-4xl lg:text-6xl ${darkMode ? "text-slate-50" : "text-slate-900"} font-bold text-center leading-snug`}
+          className={`text-2xl md:text-4xl lg:text-6xl ${darkMode ? "text-slate-50" : "text-slate-900"} font-bold text-center !leading-snug`}
         >
           Cultive uma Mente mais saúdavel e consciente
         </h1>
 
         <p
-          className={`text-base md:text-2xl ${darkMode ? "text-slate-50" : "text-slate-900"} font-semibold text-center leading-snug`}
+          className={`text-base md:text-2xl ${darkMode ? "text-slate-50" : "text-slate-900"} font-semibold text-center !leading-snug`}
         >
           Ao usar a MindTracking, você desbloqueia um caminho para um maior
           bem-estar e autocompreensão
@@ -246,12 +246,12 @@ export default function Home() {
         <div className="flex flex-row w-full md:max-w-[1150px] justify-between">
           <div className="flex flex-col items-start justify-center gap-8">
             <h1
-              className={`text-2xl md:text-4xl lg:text-6xl ${darkMode ? "text-slate-50" : "text-slate-900"} font-bold text-start leading-snug`}
+              className={`text-2xl md:text-4xl lg:text-6xl ${darkMode ? "text-slate-50" : "text-slate-900"} font-bold text-start !leading-snug`}
             >
               Sua mente tem perguntas?
             </h1>
             <p
-              className={`text-base md:text-2xl ${darkMode ? "text-slate-50" : "text-slate-900"} font-medium text-start leading-snug`}
+              className={`text-base md:text-2xl ${darkMode ? "text-slate-50" : "text-slate-900"} font-medium text-start !leading-snug`}
             >
               É normal ter dúvidas no começo. Por isso, preparamos as respostas
               para as perguntas mais comuns sobre a plataforma.
