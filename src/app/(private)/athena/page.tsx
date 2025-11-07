@@ -64,9 +64,82 @@ export default function Athena() {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatCarouselRef = useRef<HTMLDivElement>(null);
+
+  // Chave para armazenar mensagens no localStorage
+  const STORAGE_KEY = "athena_chat_messages";
+
+  // Detectar se foi recarregamento ou navegação ao carregar a página
+  useEffect(() => {
+    if (typeof window !== "undefined" && !isLoaded) {
+      try {
+        // Verificar o tipo de navegação usando Performance API
+        const navigationEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
+        const navigationType = navigationEntries[0]?.type;
+        const isReload = navigationType === "reload";
+        
+        if (isReload) {
+          // É um recarregamento (F5, botão reload), carregar mensagens do localStorage
+          const savedMessages = localStorage.getItem(STORAGE_KEY);
+          if (savedMessages) {
+            const parsedMessages = JSON.parse(savedMessages);
+            // Converter timestamps de string para Date
+            const messagesWithDates: Message[] = parsedMessages.map((msg: any) => ({
+              ...msg,
+              timestamp: new Date(msg.timestamp),
+            }));
+            setMessages(messagesWithDates);
+          }
+        } else {
+          // É uma nova navegação (navigate, back_forward, etc), limpar mensagens antigas
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar mensagens do localStorage:", error);
+        // Se houver erro, limpar o localStorage corrompido
+        localStorage.removeItem(STORAGE_KEY);
+      } finally {
+        setIsLoaded(true);
+      }
+    }
+  }, [isLoaded]);
+
+  // Salvar mensagens no localStorage com debounce para evitar muitas escritas durante animação
+  useEffect(() => {
+    if (typeof window !== "undefined" && isLoaded && messages.length > 0) {
+      const timeoutId = setTimeout(() => {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+        } catch (error) {
+          console.error("Erro ao salvar mensagens no localStorage:", error);
+          // Se o localStorage estiver cheio, tentar limpar mensagens antigas
+          try {
+            // Manter apenas as últimas 50 mensagens
+            const recentMessages = messages.slice(-50);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(recentMessages));
+            setMessages(recentMessages);
+          } catch (e) {
+            console.error("Erro ao limpar mensagens antigas:", e);
+          }
+        }
+      }, 500); // Debounce de 500ms
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [messages, isLoaded]);
+
+  // Scroll para o final após carregar mensagens do localStorage
+  useEffect(() => {
+    if (isLoaded && messages.length > 0) {
+      // Pequeno delay para garantir que o DOM foi renderizado
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    }
+  }, [isLoaded]);
 
   // Mensagens sugeridas
   const suggestedMessages = [
@@ -128,8 +201,10 @@ export default function Athena() {
   }, [messages.length]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (isLoaded) {
+      scrollToBottom();
+    }
+  }, [messages, isLoaded]);
 
   const handleSuggestedMessageClick = (message: string) => {
     setInputValue(message);
@@ -272,12 +347,12 @@ export default function Athena() {
 
   return (
     <div
-      className={`w-full  h-screen flex flex-col justify-center align-center ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}
+      className={`w-full h-screen flex flex-col ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}
     >
       {/* Área das Mensagens - Scroll Independente */}
       <div className="flex-1 w-full pl-0 lg:pl-37.5 mt-10 overflow-hidden pt-20 lg:pt-4">
         <div
-          className="flex h-full w-full overflow-y-auto p-2 sm:p-4 justify-center items-center"
+          className="flex h-full w-full overflow-y-auto md:p-2 p-4 justify-start items-start"
           ref={chatContainerRef}
         >
           {messages.length === 0 ? (
@@ -330,15 +405,15 @@ export default function Athena() {
               </div>
             </div>
           ) : (
-            <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 px-2 sm:px-0">
+            <div className="w-full max-w-4xl mx-auto md:space-y-3 space-y-4 md:px-2 px-5">
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex w-full ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
                     className={`
-                                            max-w-[85%] sm:max-w-xs lg:max-w-md px-2.5 py-2 sm:px-3 sm:py-2 rounded-2xl
+                                            max-w-[85%] sm:max-w-md lg:max-w-lg px-2.5 py-2 sm:px-3 sm:py-2 rounded-2xl
                                             ${
                                               message.sender === "user"
                                                 ? "bg-blue-600 text-white"
@@ -373,7 +448,7 @@ export default function Athena() {
               ))}
               {/* Indicador de digitação */}
               {isTyping && (
-                <div className="flex justify-start px-2 sm:px-0">
+                <div className="flex w-full justify-start">
                   <div
                     className={`px-2.5 py-2 sm:px-3 sm:py-2 rounded-2xl ${theme === "dark" ? "bg-gray-700" : "bg-gray-100"}`}
                   >
