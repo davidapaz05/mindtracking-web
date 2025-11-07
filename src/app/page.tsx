@@ -80,7 +80,7 @@ export default function Home() {
               <DarkModeToggle darkMode={darkMode} toggleTheme={toggleTheme} />
             </div>
             <Button
-              text="Acessar meu espaço"
+              text="Fazer login"
               secondary={false}
               widthClass="w-full"
               onClick={() => setIsLoginModalOpen(true)}

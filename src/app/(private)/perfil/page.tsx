@@ -229,7 +229,7 @@ export default function PerfilPage() {
             />
           ) : (
             <Image
-              src="/images/paisagem.png"
+              src="/"
               alt="Foto paisagem"
               fill
               className="object-cover object-bottom"
@@ -296,7 +296,7 @@ export default function PerfilPage() {
             </h2>
           </div>
 
-          <div className="mt-6 md:mt-0 md:ml-auto z-10 w-full md:w-auto flex flex-col sm:flex-row flex-wrap gap-2 md:gap-3 justify-center md:justify-end">
+          <div className="ml-0 md:ml-8 lg:ml-0 mt-6 md:mt-0 z-10 w-full md:w-auto flex flex-col sm:flex-row flex-wrap gap-2 md:gap-3 justify-center md:justify-end">
             <button
               className="w-full sm:flex-1 sm:min-w-[140px] md:min-w-[150px] lg:min-w-[160px] bg-blue-600 px-4 md:px-6 h-9 rounded-full font-bold hover:bg-blue-700 text-white whitespace-nowrap text-center text-sm md:text-base"
               onClick={() => setModalOpen(true)}
