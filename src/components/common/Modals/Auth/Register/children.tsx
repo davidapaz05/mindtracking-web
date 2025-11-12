@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { register as registerApi, login as loginApi } from "@/lib/api/auth";
-import { setAuthToken } from "@/lib/api/axios";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 import IconInput from "@/components/common/Inputs/InputEmail";
 import PasswordInput from "@/components/common/Inputs/InputSenha";
@@ -22,6 +22,7 @@ import {
 
 export default function Register() {
   const { theme } = useTheme();
+  const { syncAuthState } = useAuth();
   const [displayedText, setDisplayedText] = useState("");
   const [isRegisterView, setIsRegisterView] = useState(true);
   const [currentText, setCurrentText] = useState("");
@@ -263,15 +264,20 @@ export default function Register() {
           // Após verificar o e-mail com sucesso, faz login para obter JWT e dados do usuário
           try {
             const res = await loginApi(email, password);
-            const token = res.token;
-            if (token) {
-              localStorage.setItem("mt_token", token);
-              sessionStorage.setItem("mt_token", token);
-              setAuthToken(token);
-            }
-            if (res.user) {
-              localStorage.setItem("mt_user", JSON.stringify(res.user));
-              sessionStorage.setItem("mt_user", JSON.stringify(res.user));
+            const token = res.token ?? null;
+            syncAuthState(token, res.user);
+            if (typeof window !== "undefined") {
+              if (token) {
+                sessionStorage.setItem("mt_token", token);
+              } else {
+                sessionStorage.removeItem("mt_token");
+              }
+
+              if (res.user) {
+                sessionStorage.setItem("mt_user", JSON.stringify(res.user));
+              } else {
+                sessionStorage.removeItem("mt_user");
+              }
             }
           } catch {
             // Se falhar o login automático, segue para questionário mesmo assim

@@ -327,7 +327,7 @@ export default function PerfilPage() {
           }`}
         />
 
-        <div className="px-6 md:px-8 lg:-mx-8 xl:-mx-2 2xl:-mx-2 gap-2">
+        <div className="px-6 md:px-8 xl:-mx-2 2xl:-mx-2 gap-2">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 lg:gap-12 lg:gap-x-14 py-8">
             <div className={fieldClasses}>
               <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">

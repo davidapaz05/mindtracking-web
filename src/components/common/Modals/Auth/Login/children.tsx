@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { login as loginApi } from "@/lib/api/auth";
-import { setAuthToken } from "@/lib/api/axios";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 import IconInput from "@/components/common/Inputs/InputEmail";
 import PasswordInput from "@/components/common/Inputs/InputSenha";
@@ -21,6 +21,7 @@ interface User {
 
 export default function Login() {
   const { theme } = useTheme();
+  const { syncAuthState } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -134,13 +135,19 @@ export default function Login() {
       }
 
       // Armazena token e user (normal flow)
-      localStorage.setItem("mt_token", res.token);
-      sessionStorage.setItem("mt_token", res.token);
-      // Aplica imediatamente o Authorization na instância axios (evita precisar recarregar)
-      setAuthToken(res.token);
-      if (res.user) {
-        localStorage.setItem("mt_user", JSON.stringify(res.user));
-        sessionStorage.setItem("mt_user", JSON.stringify(res.user));
+      syncAuthState(res.token ?? null, res.user);
+      if (typeof window !== "undefined") {
+        if (res.token) {
+          sessionStorage.setItem("mt_token", res.token);
+        } else {
+          sessionStorage.removeItem("mt_token");
+        }
+
+        if (res.user) {
+          sessionStorage.setItem("mt_user", JSON.stringify(res.user));
+        } else {
+          sessionStorage.removeItem("mt_user");
+        }
       }
       // Redireciona conforme questionario_inicial
       if (questionarioInicial === false) {
@@ -167,14 +174,19 @@ export default function Login() {
 
   const handleVerifySuccess = () => {
     // Called after verifyEmail inside modal succeeds
-    if (pendingToken) {
-      localStorage.setItem("mt_token", pendingToken);
-      sessionStorage.setItem("mt_token", pendingToken);
-      setAuthToken(pendingToken);
-    }
-    if (pendingUser) {
-      localStorage.setItem("mt_user", JSON.stringify(pendingUser));
-      sessionStorage.setItem("mt_user", JSON.stringify(pendingUser));
+    syncAuthState(pendingToken, pendingUser);
+    if (typeof window !== "undefined") {
+      if (pendingToken) {
+        sessionStorage.setItem("mt_token", pendingToken);
+      } else {
+        sessionStorage.removeItem("mt_token");
+      }
+
+      if (pendingUser) {
+        sessionStorage.setItem("mt_user", JSON.stringify(pendingUser));
+      } else {
+        sessionStorage.removeItem("mt_user");
+      }
     }
     // Após verificar o código com sucesso, enviar o usuário ao questionário inicial
     // conforme requisito: "após o codigo estiver correto ele deve ser redirecionado para a tela de questionario."

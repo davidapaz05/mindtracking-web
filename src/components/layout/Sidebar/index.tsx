@@ -39,6 +39,7 @@ export default function Sidebar({ onToggle }: { onToggle?: (open: boolean) => vo
   const { theme, toggleTheme } = useTheme();
   const { logout, user, getUserInitials } = useAuth();
 
+
   const handleLogoutClick = () => {
     setShowLogoutModal(true);
   };
