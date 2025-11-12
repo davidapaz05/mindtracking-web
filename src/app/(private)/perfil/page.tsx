@@ -187,18 +187,18 @@ export default function PerfilPage() {
   };
 
   const handleFotoPerfilChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      const url = await uploadToCloudinary(e.target.files[0]);
-      if (url) {
-        setFotoPerfilUrl(url);
-        await updateFotoUsuario({ foto_perfil_url: url });
-        // Atualiza imediatamente o contexto para refletir na Sidebar
-        updateUserData({ fotoPerfil: url });
-      }
+  e: React.ChangeEvent<HTMLInputElement>,
+) => {
+  if (e.target.files && e.target.files[0]) {
+    const url = await uploadToCloudinary(e.target.files[0]);
+    if (url) {
+      setFotoPerfilUrl(url);                    // só para exibir localmente
+      await updateFotoUsuario({ foto_perfil_url: url }); // UPDATE NO BACKEND
+      updateUserData({ fotoPerfil: url });      // IMPORTANTE: update contexto global instantâneo
     }
-  };
+  }
+};
+
 
   const handleFotoFundoChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -252,7 +252,7 @@ export default function PerfilPage() {
           </label>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center md:items-start px-4 sm:px-6 mt-6 relative gap-4 md:gap-0">
+        <div className="flex flex-col md:flex-row lg:justify-between items-center md:items-start px-4 sm:px-6 mt-6 relative gap-4 md:gap-0">
           <div className="flex flex-col items-center md:items-start -mt-16 z-10 flex-shrink-0">
             <div className="relative">
               <Avatar

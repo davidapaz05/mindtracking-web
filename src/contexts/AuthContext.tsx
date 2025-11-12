@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.tsx
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import * as authService from "@/lib/api/auth";
@@ -12,7 +11,7 @@ export interface UserData {
   idade?: number | null;
   telefone?: string | null;
   genero?: string | null;
-  fotoPerfil?: string | null;
+  fotoPerfil?: string | null; // Padronize com camelCase para usar no app
 }
 
 type AuthContextType = {
@@ -35,9 +34,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Função para normalizar e carregar dados do usuário do backend
   const fetchUserData = async () => {
     try {
       const response = await authService.dadosUser();
+      console.log("Dados recebidos do backend:", response);
 
       const isRecord = (val: unknown): val is Record<string, unknown> =>
         typeof val === "object" && val !== null;
@@ -57,9 +58,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
+      // Normaliza o campo da foto para "fotoPerfil" no contexto
       const fotoPerfilCandidate =
-        pickString(raw, "fotoPerfil") ||
-        pickString(raw, "foto_perfil_url") ||
+        pickString(raw, "foto_perfil_url") || // Vem do backend
+        pickString(raw, "fotoPerfil") ||     // Possível campo alternativo
         pickString(raw, "foto_perfil") ||
         pickString(raw, "fotoPerfilUrl") ||
         null;
@@ -72,24 +74,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         nome: pickString(raw, "nome"),
         email: pickString(raw, "email"),
         data_nascimento: pickString(raw, "data_nascimento") ?? null,
-        idade:
-          typeof raw["idade"] === "number" ? (raw["idade"] as number) : null,
+        idade: typeof raw["idade"] === "number" ? (raw["idade"] as number) : null,
         telefone: pickString(raw, "telefone") ?? null,
         genero: pickString(raw, "genero") ?? null,
-        fotoPerfil: fotoPerfilCandidate,
+        fotoPerfil: fotoPerfilCandidate, // Campo padronizado
       };
 
-      setUser(normalized);
+      console.log("Valor final para fotoPerfil:", fotoPerfilCandidate);
+
+      setUser(normalized); // Atualiza o estado com o objeto padronizado
     } catch (err) {
       console.error("Erro ao carregar dados do usuário:", err);
       setUser(null);
     }
   };
 
+  // Atualiza parte do usuário (exemplo: troca da foto) mantendo o restante
   const updateUserData = (newData: Partial<UserData>) => {
     setUser((prev) => (prev ? { ...prev, ...newData } : null));
   };
 
+  // Função para obter as iniciais do nome (fallback para o avatar)
   const getUserInitials = (name?: string) => {
     if (!name) return "?";
     const parts = name.trim().split(" ");
@@ -99,18 +104,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    // restore token on mount
-    const t =
-      typeof window !== "undefined" ? localStorage.getItem("mt_token") : null;
+    // Restaura o token no carregamento e busca dados do usuário
+    const t = typeof window !== "undefined" ? localStorage.getItem("mt_token") : null;
     if (t) {
       setToken(t);
       setAuthToken(t);
-      // Buscar dados do usuário quando há token
-      fetchUserData();
+      fetchUserData(); // Busca e normaliza dados do usuário no carregamento
     }
     setLoading(false);
   }, []);
 
+  // Login chama fetchUserData para garantir dados padronizados atualizados
   const login = async (email: string, senha: string) => {
     setLoading(true);
     try {
@@ -119,19 +123,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("mt_token", t);
       setAuthToken(t);
       setToken(t);
-      // Buscar dados completos do usuário após login
+      // IMPORTANTE: chama somente fetchUserData para normalizar dados, não setUser direto
       await fetchUserData();
     } finally {
       setLoading(false);
     }
   };
 
+  // Logout e limpeza de estados
   const logout = () => {
     localStorage.removeItem("mt_token");
     setAuthToken(null);
     setToken(null);
     setUser(null);
-    // Redirecionar para a landing page
     window.location.href = "/";
   };
 

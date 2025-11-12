@@ -512,10 +512,10 @@ export default function Register() {
                 error={phoneError}
               />
               <GenderSelect onChange={handleGenderChange} error={genderError} />
-              {apiError && (
-                <div className="w-full text-center text-red-500 text-sm mb-2">{apiError}</div>
-              )}
             </div>
+              {apiError && (
+                <div className="w-full text-center text-red-500 text-sm">{apiError}</div>
+              )}
 
 
             <div className="w-full mt-3 md:mt-0 flex flex-col items-center">
