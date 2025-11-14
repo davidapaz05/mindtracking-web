@@ -47,4 +47,7 @@ jobs:
             --name mindtracking-web \
             --network mindtrack-net \
             -p 80:80 \
+            -e NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+            -e NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}" \
+            -e NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="${{ secrets.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET }}" \
             mindtrack/mindtracking-web:latest
