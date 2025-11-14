@@ -108,14 +108,15 @@ export default function ModalDiario({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 px-4 py-[70px]">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 px-3 sm:px-4 py-4 sm:py-[70px] overflow-y-auto">
       <div
-        className={`p-6 rounded-2xl w-full max-w-[600px] relative shadow-xl transition-all duration-300 mt-[50px] mb-[50px]
+        className={`p-4 sm:p-6 rounded-2xl w-full max-w-[600px] relative shadow-xl transition-all duration-300 my-4 sm:mt-[50px] sm:mb-[50px]
         ${theme === "dark" ? "bg-slate-900 text-white" : "bg-white text-gray-900"}`}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 cursor-pointer"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1 cursor-pointer z-10"
+          aria-label="Fechar modal"
         >
           <Image
             src={
@@ -126,11 +127,11 @@ export default function ModalDiario({
             alt="Fechar"
             width={40}
             height={40}
-            className="w-10 h-10"
+            className="w-8 h-8 sm:w-10 sm:h-10"
           />
         </button>
 
-        <div className="flex flex-col items-center gap-2 text-center mt-10">
+        <div className="flex flex-col items-center gap-2 text-center mt-6 sm:mt-10">
           <Image
             src={
               theme === "dark"
@@ -148,14 +149,14 @@ export default function ModalDiario({
           </p>
         </div>
 
-        <div className="mt-6 space-y-3">
+        <div className="mt-4 sm:mt-6 space-y-3">
           <input
             type="text"
             value={title}
             onChange={(e) => onTitleChangeHandler(e.target.value)}
             placeholder="Adicione um Título"
             maxLength={30}
-            className={`w-full rounded-lg p-3 text-sm md:text-base border-blue-600 border-[2.5px] focus:border-blue-600 focus:ring-0
+            className={`w-full rounded-lg p-2.5 sm:p-3 text-sm md:text-base border-blue-600 border-2 sm:border-[2.5px] focus:border-blue-600 focus:ring-0
               ${theme === "dark"
                 ? "bg-slate-800 text-white placeholder:text-slate-400"
                 : "bg-white text-gray-900 placeholder:text-slate-400"
@@ -163,8 +164,8 @@ export default function ModalDiario({
           />
 
           <textarea
-            className={`w-full min-h-[180px] max-h-[270px] resize-none rounded-lg p-4 text-sm md:text-base leading-relaxed outline-none
-              border-blue-600 border-[2.5px] focus:border-blue-600 focus:ring-0
+            className={`w-full min-h-[150px] sm:min-h-[180px] max-h-[200px] sm:max-h-[270px] resize-none rounded-lg p-3 sm:p-4 text-sm md:text-base leading-relaxed outline-none
+              border-blue-600 border-2 sm:border-[2.5px] focus:border-blue-600 focus:ring-0
               ${theme === "dark"
                 ? "bg-slate-800 text-white placeholder:text-slate-400"
                 : "bg-white text-gray-900 placeholder:text-slate-400"
@@ -175,12 +176,12 @@ export default function ModalDiario({
           />
         </div>
 
-        {error && <div className="text-red-400 mt-2">{error}</div>}
+        {error && <div className={`text-red-400 mt-2 text-xs sm:text-sm ${theme === "dark" ? "text-red-400" : "text-red-600"}`}>{error}</div>}
 
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-4 sm:mt-6">
           <button
             onClick={onClose}
-            className="min-w-[120px] py-2 px-4 cursor-pointer rounded-2xl text-sm font-medium text-white bg-gray-400 hover:bg-slate-800 transition-colors"
+            className="w-full sm:min-w-[120px] py-2 px-4 cursor-pointer rounded-2xl text-sm font-medium text-white bg-gray-400 hover:bg-gray-500 active:bg-gray-600 transition-colors disabled:opacity-50"
             type="button"
             disabled={saving}
           >
@@ -188,7 +189,7 @@ export default function ModalDiario({
           </button>
           <button
             onClick={handleSave}
-            className="min-w-[120px] py-2 px-4 cursor-pointer rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+            className="w-full sm:min-w-[120px] py-2 px-4 cursor-pointer rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             type="button"
             disabled={saving || !title || value.trim().length === 0}
           >

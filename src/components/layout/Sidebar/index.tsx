@@ -58,7 +58,7 @@ export default function Sidebar({ onToggle }: { onToggle?: (open: boolean) => vo
       {/* Header mobile/tablet fixo no topo */}
       {!mobileOpen && (
         <div
-          className={`lg:hidden fixed top-9 left-0 right-0 z-50 flex items-center justify-between px-7 md:px-[74px] h-[64px] ${theme === "dark" ? "bg-gray-900" : "bg-white"
+          className={`lg:hidden left-0 right-0 mt-10 z-50 flex items-center justify-between px-7 md:px-[74px] h-[64px] ${theme === "dark" ? "bg-gray-900" : "bg-white"
             } ${theme === "dark" ? "text-white" : "text-black"}`}
         >
           <div className="flex items-center gap-3">
@@ -92,7 +92,7 @@ export default function Sidebar({ onToggle }: { onToggle?: (open: boolean) => vo
           setIsOpen(false);
           onToggle?.(false);
         }}
-        className={`fixed left-0 top-0 h-screen shadow-lg border-r transition-all py-[34px] ease-in-out duration-300 z-40
+        className={`fixed left-0 top-0 h-screen shadow-lg rounded-r-3xl transition-all py-[34px] ease-in-out duration-300 z-40
           ${isOpen ? "w-[400px] pl-9" : "w-[150px]"}
           hidden lg:flex flex-col justify-between
           ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}

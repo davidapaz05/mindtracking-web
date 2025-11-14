@@ -14,11 +14,13 @@ import { toast } from "react-toastify";
 interface EditProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 export default function EditProfileModal({
   isOpen,
   onClose,
+  onSuccess,
 }: EditProfileModalProps) {
   const { theme } = useTheme();
 
@@ -160,6 +162,7 @@ export default function EditProfileModal({
 
       if (response.success) {
         toast.success("Perfil atualizado com sucesso!");
+        onSuccess?.();
         onClose();
       } else {
         toast.error("Erro ao atualizar perfil. Tente novamente.");

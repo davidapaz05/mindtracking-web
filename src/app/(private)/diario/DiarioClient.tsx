@@ -4,7 +4,6 @@ import ModalDiario from "@/components/common/Modals/Diario/ModalEscreverDiario";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTheme } from "../../../contexts/ThemeContext";
-import Sidebar from "@/components/layout/Sidebar";
 import ModalAnalise from "@/components/common/Modals/Diario/ModalAnalise";
 
 interface Analysis {
@@ -162,68 +161,79 @@ export default function DiarioClient() {
 
   return (
     <div className="h-screen min-h-0 flex flex-col">
-      <Sidebar />
-      <div className="flex flex-col min-h-0 h-full p-6 md:p-10 lg:ml-37.5 md:mt-20 mt-25 lg:mt-0 overflow-hidden">
-        <h1
-          className={`text-2xl font-bold mb-10 font-inter ${theme === "dark" ? "text-white" : "text-gray-900"
-            } transition-all duration-300 ease-in-out`}
-        >
-          Diário Emocional
-        </h1>
+      <div className="flex flex-col min-h-0 h-full p-4 sm:p-6 md:p-10 lg:ml-37.5 mt-0 sm:mt-0 overflow-hidden">
+        <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-10">
+          <h1
+            className={`text-xl sm:text-2xl font-bold font-inter ${theme === "dark" ? "text-white" : "text-gray-900"
+              } transition-all duration-300 ease-in-out`}
+          >
+            Diário Emocional
+          </h1>
+        </div>
         <div
-          className={`flex-1 min-h-0 flex flex-col rounded-xl p-6 ${theme === "dark"
+          className={`flex-1 min-h-0 flex flex-col rounded-xl p-3 sm:p-4 md:p-6 ${theme === "dark"
             ? "border-2 border-blue-600 bg-slate-900"
             : "bg-white border-2 border-black"
             } transition-all duration-300 ease-in-out`}
         >
           <div className="flex-1 min-h-0 flex flex-col overflow-y-auto">
             {loading ? (
-              <p className="text-center font-inter">Carregando...</p>
-            ) : cards.length === 0 ? (
-              <p className="text-center font-inter">
-                Nenhum registro encontrado.
+              <p className={`text-center font-inter text-sm sm:text-base ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
+                Carregando...
               </p>
+            ) : cards.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full py-8">
+                <p className={`text-center font-inter text-sm sm:text-base ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
+                  Nenhum registro encontrado.
+                </p>
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium transition-colors"
+                >
+                  Escrever no diário
+                </button>
+              </div>
             ) : (
               <>
-                <div className="mb-4 flex items-center justify-between shrink-0">
-                  <div className="text-sm text-gray-400 pl-4">
+                <div className="mb-3 sm:mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between shrink-0 gap-2 w-full max-w-full">
+                  <div className={`text-xs sm:text-sm truncate ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
                     Registros encontrados:{" "}
                     <span className={`font-medium ${theme === "dark" ? "text-white/90" : "text-gray-800"}`}>
                       {cards.length}
                     </span>
                   </div>
                   {fetchError && (
-                    <div className="text-sm text-red-400">
+                    <div className="text-xs sm:text-sm text-red-400 truncate">
                       Erro: {fetchError}
                     </div>
                   )}
                 </div>
-                <div className="grid gap-0 w-full max-w-full sm:grid-cols-1 md:grid-cols-2 auto-rows-fr">
+                <div className="grid gap-3 sm:gap-4 w-full max-w-full sm:grid-cols-1 md:grid-cols-2 auto-rows-fr">
                   {cards.map((card) => (
-                    <div key={card.id} className="p-4 max-w-full h-full">
+                    <div key={card.id} className="max-w-full w-full min-w-0 h-full">
                       <div
-                        className={`w-full h-full rounded-lg p-4 border-2 flex flex-col justify-between transition-all duration-300 ease-in-out ${theme === "dark"
+                        className={`w-full h-full rounded-lg p-3 sm:p-4 border-2 flex flex-col justify-between transition-all duration-300 ease-in-out min-w-0 overflow-hidden box-border ${theme === "dark"
                           ? "bg-slate-800 text-gray-200 border-blue-600"
-                          : "bg-slate-50 text-gray-800 border-none shadow-[0_8px_15px_0_rgba(0,0,0,0.4)]"
+                          : "bg-slate-50 text-gray-800 border-none shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] sm:shadow-[0_8px_15px_0_rgba(0,0,0,0.4)]"
                           }`}
                       >
-                        <div className="flex justify-between items-start mb-3">
-                          <div>
-                            <h2 className="font-inter font-bold text-base md:text-lg">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 sm:mb-3 gap-2 min-w-0 w-full">
+                          <div className="flex-1 min-w-0 w-full">
+                            <h2 className={`font-inter font-bold text-sm sm:text-base md:text-lg truncate w-full ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
                               {card.title}
                             </h2>
                           </div>
-                          <div className="flex flex-col items-end">
-                            <span className="text-sm text-gray-400 font-inter">
+                          <div className="flex flex-col items-start sm:items-end flex-shrink-0">
+                            <span className={`text-xs sm:text-sm font-inter whitespace-nowrap ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
                               {card.date}
                             </span>
                           </div>
                         </div>
-                        <p className="text-sm mb-4 font-inter !leading-relaxed text-left whitespace-pre-line overflow-hidden text-ellipsis">
+                        <p className={`text-xs sm:text-sm mb-3 sm:mb-4 font-inter !leading-relaxed text-left break-words overflow-wrap-anywhere w-full ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
                           {truncateText(card.description)}
                         </p>
                         {card.analysis && (
-                          <div className="mt-2">
+                          <div className="mt-auto pt-2 w-full">
                             <button
                               onClick={() => {
                                 if (card.analysis) {
@@ -235,14 +245,15 @@ export default function DiarioClient() {
                                   });
                                 }
                               }}
-                              className="inline-flex items-center gap-2 px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm transition duration-200 ease-in-out shadow-md hover:shadow-lg"
+                              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-full text-xs sm:text-sm transition duration-200 ease-in-out shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap"
                               aria-label={`Ver análise de ${card.title}`}
                             >
                               <Image
                                 src="/images/icons/lupa.svg"
                                 alt="Lupa"
-                                width={14}
-                                height={14}
+                                width={12}
+                                height={12}
+                                className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0"
                               />
                               <span>Ver Análise</span>
                             </button>
@@ -291,7 +302,7 @@ export default function DiarioClient() {
             );
 
             const newCard = {
-              id: created.id ?? created._id ?? Math.random(),
+              id: created.id ?? created._id ?? Math.random(), 
               title: titulo,
               date: data_hora ? formatDate(data_hora) : "",
               description: texto,
@@ -366,7 +377,6 @@ export default function DiarioClient() {
                       break;
                     }
                   } catch {
-                    // ignore
                   }
                   await new Promise((r) => setTimeout(r, 2000));
                 }
