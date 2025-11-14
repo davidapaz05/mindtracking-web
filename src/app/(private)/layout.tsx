@@ -19,7 +19,7 @@ export default function PrivateLayout({
   const hasStoredToken = useMemo(() => {
     if (typeof window === "undefined") return null;
     return localStorage.getItem("mt_token");
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     if (loading) return;

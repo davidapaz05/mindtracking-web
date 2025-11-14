@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { getDiarios, getDiarioById } from "@/lib/api/diario";
 import ModalDiario from "@/components/common/Modals/Diario/ModalEscreverDiario";
@@ -190,7 +188,7 @@ export default function DiarioClient() {
                 <div className="mb-4 flex items-center justify-between shrink-0">
                   <div className="text-sm text-gray-400 pl-4">
                     Registros encontrados:{" "}
-                    <span className="font-medium text-white/90">
+                    <span className={`font-medium ${theme === "dark" ? "text-white/90" : "text-gray-800"}`}>
                       {cards.length}
                     </span>
                   </div>
@@ -206,7 +204,7 @@ export default function DiarioClient() {
                       <div
                         className={`w-full h-full rounded-lg p-4 border-2 flex flex-col justify-between transition-all duration-300 ease-in-out ${theme === "dark"
                           ? "bg-slate-800 text-gray-200 border-blue-600"
-                          : "bg-slate-50 text-gray-800 border-blue-500"
+                          : "bg-slate-50 text-gray-800 border-none shadow-[0_8px_15px_0_rgba(0,0,0,0.4)]"
                           }`}
                       >
                         <div className="flex justify-between items-start mb-3">

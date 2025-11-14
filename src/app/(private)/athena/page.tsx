@@ -85,9 +85,14 @@ export default function Athena() {
           // É um recarregamento (F5, botão reload), carregar mensagens do localStorage
           const savedMessages = localStorage.getItem(STORAGE_KEY);
           if (savedMessages) {
-            const parsedMessages = JSON.parse(savedMessages);
+            const parsedMessages = JSON.parse(savedMessages) as Array<{
+              id: string;
+              content: string;
+              sender: "user" | "athena";
+              timestamp: string;
+            }>;
             // Converter timestamps de string para Date
-            const messagesWithDates: Message[] = parsedMessages.map((msg: any) => ({
+            const messagesWithDates: Message[] = parsedMessages.map((msg) => ({
               ...msg,
               timestamp: new Date(msg.timestamp),
             }));
@@ -139,7 +144,7 @@ export default function Athena() {
         scrollToBottom();
       }, 100);
     }
-  }, [isLoaded]);
+  }, [isLoaded, messages.length]);
 
   // Mensagens sugeridas
   const suggestedMessages = [
