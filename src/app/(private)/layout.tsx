@@ -31,7 +31,7 @@ export default function PrivateLayout({
       setIsAuthorized(false);
       if (!hasRedirectedRef.current) {
         hasRedirectedRef.current = true;
-        router.replace("/login");
+        router.replace("/");
       }
       return;
     }
