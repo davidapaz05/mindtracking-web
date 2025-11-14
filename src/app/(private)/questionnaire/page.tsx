@@ -224,7 +224,7 @@ setIsDiario(usuarioJaFezInicial);
               const payloadObj = JSON.parse(decodeURIComponent(escape(payloadRaw)));
               usuarioId = Number(payloadObj.id ?? payloadObj.usuario_id ?? payloadObj.sub ?? null) || null;
             }
-          } catch (e) {}
+          } catch {}
         }
       }
       const respostasArr = (payloadAnswers ?? answers).map((a) => ({ pergunta_id: a.perguntaId, alternativa_id: a.alternativaId }));

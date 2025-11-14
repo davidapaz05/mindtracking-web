@@ -11,7 +11,7 @@ export default function DarkModeToggle({ darkMode, toggleTheme }: Props) {
   return (
     <button
       onClick={toggleTheme}
-      className="w-[65px] h-11 md:w-17 md:h-8 flex items-center rounded-full p-1 border-[2.5px] border-blue-600 
+      className="w-20 md:w-[65px] h-11 md:w-17 md:h-8 flex items-center rounded-full p-1 border-[2.5px] border-blue-600 
                  transition-colors duration-300 mt-4 sm:mt-0 self-center sm:self-auto cursor-pointer"
     >
       <div

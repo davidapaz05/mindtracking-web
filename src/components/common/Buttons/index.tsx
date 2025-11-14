@@ -15,7 +15,7 @@ interface PropsButton {
 export default function Button(props: PropsButton) {
   const width = props.widthClass ?? "w-auto";
   const padding = props.paddingClass ?? "px-10 py-2"; 
-  const mtForSecondary = props.mtForSecondary ?? "md:mt-8";
+  const mtForSecondary = props.mtForSecondary ?? "md:mt-5";
 
   const baseClasses = `
     ${width} ${padding} transition-all duration-200 ${mtForSecondary} cursor-pointer

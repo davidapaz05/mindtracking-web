@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { register as registerApi, login as loginApi } from "@/lib/api/auth";
-import { setAuthToken } from "@/lib/api/axios";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 import IconInput from "@/components/common/Inputs/InputEmail";
 import PasswordInput from "@/components/common/Inputs/InputSenha";
@@ -22,6 +22,7 @@ import {
 
 export default function Register() {
   const { theme } = useTheme();
+  const { syncAuthState } = useAuth();
   const [displayedText, setDisplayedText] = useState("");
   const [isRegisterView, setIsRegisterView] = useState(true);
   const [currentText, setCurrentText] = useState("");
@@ -263,15 +264,20 @@ export default function Register() {
           // Após verificar o e-mail com sucesso, faz login para obter JWT e dados do usuário
           try {
             const res = await loginApi(email, password);
-            const token = res.token;
-            if (token) {
-              localStorage.setItem("mt_token", token);
-              sessionStorage.setItem("mt_token", token);
-              setAuthToken(token);
-            }
-            if (res.user) {
-              localStorage.setItem("mt_user", JSON.stringify(res.user));
-              sessionStorage.setItem("mt_user", JSON.stringify(res.user));
+            const token = res.token ?? null;
+            syncAuthState(token, res.user);
+            if (typeof window !== "undefined") {
+              if (token) {
+                sessionStorage.setItem("mt_token", token);
+              } else {
+                sessionStorage.removeItem("mt_token");
+              }
+
+              if (res.user) {
+                sessionStorage.setItem("mt_user", JSON.stringify(res.user));
+              } else {
+                sessionStorage.removeItem("mt_user");
+              }
             }
           } catch {
             // Se falhar o login automático, segue para questionário mesmo assim
@@ -286,13 +292,11 @@ export default function Register() {
 
       {isRegisterView ? (
         <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center lg:items-start lg:justify-between">
-          <div className="hidden lg:flex flex-col items-center mt-8 relative">
-            <div className="flex items-start">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
-                className={`hidden lg:flex absolute left-[15em] w-[16em] max-w-[420px] p-4 rounded-lg shadow-md ${theme === "dark" ? "bg-slate-700 text-white" : "bg-white text-slate-900"} border ${theme === "dark" ? "border-slate-600" : "border-slate-200"}`}
+                className={`hidden lg:flex absolute left-[15em] w-[16em] max-w-[420px] p-4 ml-6 rounded-lg shadow-md ${theme === "dark" ? "bg-slate-700 text-white" : "bg-white text-slate-900"} border ${theme === "dark" ? "border-slate-600" : "border-slate-200"}`}
                 style={{
                   borderRadius: "16px 16px 16px 0",
                   zIndex: 20,
@@ -300,6 +304,8 @@ export default function Register() {
               >
                 <p className="text-sm font-medium">{displayedText}</p>
               </motion.div>
+          <div className="hidden lg:flex flex-col items-center mt-8 relative">
+            <div className="flex items-start">
               <Image
                 className=""
                 src="/images/athena-apontando-direito.png"
@@ -310,8 +316,8 @@ export default function Register() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-center my-auto w-[28.125em] gap-2">
-            <div className="flex flex-col items-center justify-center my-auto w-[28.125em] gap-2">
+          <div className="flex flex-col items-center justify-center my-auto w-full max-w-[28.125em] gap-2">
+            <div className="flex flex-col items-center justify-center my-auto w-full max-w-[28.125em] gap-2">
               <Image
                 src={
                   theme === "dark"
@@ -377,7 +383,7 @@ export default function Register() {
                 />
               </form>
 
-              <div className="w-full mt-2 flex flex-col items-center">
+              <div className="w-full mt-2 md:mt-0 flex flex-col items-center">
                 <Button
                   text="Prosseguir para próxima etapa"
                   widthClass="md:w-full"
@@ -424,7 +430,7 @@ export default function Register() {
               />
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center my-auto w-[28.125em] gap-2">
+          <div className="flex flex-col items-center justify-center my-auto w-full max-w-[28.125em] gap-2">
             <Image
               src={
                 theme === "dark"
@@ -512,10 +518,10 @@ export default function Register() {
                 error={phoneError}
               />
               <GenderSelect onChange={handleGenderChange} error={genderError} />
-              {apiError && (
-                <div className="w-full text-center text-red-500 text-sm mb-2">{apiError}</div>
-              )}
             </div>
+              {apiError && (
+                <div className="w-full text-center text-red-500 text-sm">{apiError}</div>
+              )}
 
 
             <div className="w-full mt-3 md:mt-0 flex flex-col items-center">

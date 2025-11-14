@@ -68,7 +68,7 @@ const FAQItem = ({ question, answer, isOpen, onToggle }: FAQItemProps) => {
                 animate={{ y: 0, opacity: 0.9 }}
                 exit={{ y: -10, opacity: 0 }}
                 transition={{ duration: 0.2, delay: 0.1 }}
-                className="text-sm lg:text-base leading-relaxed"
+                className="text-sm lg:text-base !leading-relaxed"
               >
                 {answer}
               </motion.p>

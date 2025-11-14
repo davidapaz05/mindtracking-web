@@ -40,7 +40,7 @@ export default function PerfilPage() {
 
   const [fotoPerfilUrl, setFotoPerfilUrl] = useState<string | null>(null);
   const [fotoFundoUrl, setFotoFundoUrl] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [, setUploading] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -187,18 +187,18 @@ export default function PerfilPage() {
   };
 
   const handleFotoPerfilChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      const url = await uploadToCloudinary(e.target.files[0]);
-      if (url) {
-        setFotoPerfilUrl(url);
-        await updateFotoUsuario({ foto_perfil_url: url });
-        // Atualiza imediatamente o contexto para refletir na Sidebar
-        updateUserData({ fotoPerfil: url });
-      }
+  e: React.ChangeEvent<HTMLInputElement>,
+) => {
+  if (e.target.files && e.target.files[0]) {
+    const url = await uploadToCloudinary(e.target.files[0]);
+    if (url) {
+      setFotoPerfilUrl(url);                    // só para exibir localmente
+      await updateFotoUsuario({ foto_perfil_url: url }); // UPDATE NO BACKEND
+      updateUserData({ fotoPerfil: url });      // IMPORTANTE: update contexto global instantâneo
     }
-  };
+  }
+};
+
 
   const handleFotoFundoChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -229,7 +229,7 @@ export default function PerfilPage() {
             />
           ) : (
             <Image
-              src="/images/paisagem.png"
+              src="/"
               alt="Foto paisagem"
               fill
               className="object-cover object-bottom"
@@ -252,8 +252,8 @@ export default function PerfilPage() {
           </label>
         </div>
 
-        <div className="flex flex-col md:flex-row items-start px-6 mt-6 relative">
-          <div className="flex flex-col items-center md:items-start -mt-16 z-10">
+        <div className="flex flex-col md:flex-row lg:justify-between items-center md:items-start px-4 sm:px-6 mt-6 relative gap-4 md:gap-0">
+          <div className="flex flex-col items-center md:items-start -mt-16 z-10 flex-shrink-0">
             <div className="relative">
               <Avatar
                 className={`w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 text-2xl md:text-3xl lg:text-4xl font-bold border-4 relative overflow-hidden ${
@@ -291,14 +291,14 @@ export default function PerfilPage() {
                 />
               </label>
             </div>
-            <h2 className="mt-3 text-2xl font-semibold">
+            <h2 className="mt-3 text-xl sm:text-2xl font-semibold text-center md:text-left">
               {userData?.nome ?? "Usuário"}
             </h2>
           </div>
 
-          <div className="mt-6 md:mt-0 ml-auto z-10 w-full md:w-auto flex flex-col md:flex-row gap-2 md:gap-3">
+          <div className="ml-0 md:ml-8 lg:ml-0 mt-6 md:mt-0 z-10 w-full md:w-auto flex flex-col sm:flex-row flex-wrap gap-2 md:gap-3 justify-center md:justify-end">
             <button
-              className="min-w-[120px] w-full sm:w-auto bg-blue-600 px-6 h-9  rounded-full font-bold hover:bg-blue-700 text-white whitespace-nowrap text-center"
+              className="w-full sm:flex-1 sm:min-w-[140px] md:min-w-[150px] lg:min-w-[160px] bg-blue-600 px-4 md:px-6 h-9 rounded-full font-bold hover:bg-blue-700 text-white whitespace-nowrap text-center text-sm md:text-base"
               onClick={() => setModalOpen(true)}
             >
               Editar Perfil
@@ -307,13 +307,13 @@ export default function PerfilPage() {
             <button
               onClick={handleResetPassword}
               disabled={isLoading}
-              className="min-w-[120px] w-full sm:w-auto bg-blue-600 px-6  h-9 rounded-full font-bold hover:bg-blue-700 text-white text-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:flex-1 sm:min-w-[140px] md:min-w-[150px] lg:min-w-[160px] bg-blue-600 px-4 md:px-6 h-9 rounded-full font-bold hover:bg-blue-700 text-white text-center disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base whitespace-nowrap"
             >
               {isLoading ? "Enviando..." : "Redefinir Senha"}
             </button>
 
             <button
-              className="min-w-[120px] w-full sm:w-auto bg-red-600 px-6 h-9 rounded-full font-bold hover:bg-red-700 text-white whitespace-nowrap text-center"
+              className="w-full sm:flex-1 sm:min-w-[140px] md:min-w-[150px] lg:min-w-[160px] bg-red-600 px-4 md:px-6 h-9 rounded-full font-bold hover:bg-red-700 text-white whitespace-nowrap text-center text-sm md:text-base"
               onClick={() => setDeleteAccountModalOpen(true)}
             >
               Deletar Conta
@@ -327,13 +327,13 @@ export default function PerfilPage() {
           }`}
         />
 
-        <div className="px-6 md:px-8 lg:-mx-8 xl:-mx-2 2xl:-mx-2 gap-2">
+        <div className="px-6 md:px-8 xl:-mx-2 2xl:-mx-2 gap-2">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 lg:gap-12 lg:gap-x-14 py-8">
             <div className={fieldClasses}>
               <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">
                 Gênero
               </p>
-              <p className="text-lg font-semibold dark:text-white text-black">
+              <p className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
                 {capitalize(userData?.genero ?? "")}
               </p>
             </div>
@@ -341,7 +341,7 @@ export default function PerfilPage() {
               <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">
                 Idade
               </p>
-              <p className="text-lg font-semibold dark:text-white text-black">
+              <p className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
                 {userData?.idade ? `${userData.idade} Anos` : "—"}
               </p>
             </div>
@@ -349,7 +349,7 @@ export default function PerfilPage() {
               <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">
                 Telefone
               </p>
-              <p className="text-lg font-semibold dark:text-white text-black">
+              <p className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
                 {formatTelefone(userData?.telefone)}
               </p>
             </div>
@@ -357,7 +357,7 @@ export default function PerfilPage() {
               <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">
                 E-mail
               </p>
-              <p className="text-lg font-semibold dark:text-white text-black">
+              <p className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
                 {userData?.email ?? "—"}
               </p>
             </div>

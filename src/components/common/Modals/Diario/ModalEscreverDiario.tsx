@@ -132,7 +132,11 @@ export default function ModalDiario({
 
         <div className="flex flex-col items-center gap-2 text-center mt-10">
           <Image
-            src="/images/icons/IconeDiario.svg"
+            src={
+              theme === "dark"
+                ? "/images/icons/IconeDiario.svg"
+                : "/images/icons/IconeDiarioDark.svg"
+            }
             alt="Ícone Diário"
             width={42}
             height={42}
@@ -176,7 +180,7 @@ export default function ModalDiario({
         <div className="flex justify-end gap-3 mt-6">
           <button
             onClick={onClose}
-            className="min-w-[120px] py-2 px-4 cursor-pointer rounded-2xl text-sm font-medium text-white bg-slate-700 hover:bg-slate-800 transition-colors"
+            className="min-w-[120px] py-2 px-4 cursor-pointer rounded-2xl text-sm font-medium text-white bg-gray-400 hover:bg-slate-800 transition-colors"
             type="button"
             disabled={saving}
           >
