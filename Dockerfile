@@ -1,30 +1,19 @@
 # =========================
-# ESTÁGIO 1: BUILDER
+# STAGE 1 — BUILDER
 # =========================
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-ENV CI=true
-
-# Copia package.json e package-lock.json
 COPY package*.json ./
-
-# Instala dependências completas (usa npm install para evitar falhas com lock desatualizado)
 RUN npm install
 
-# Copia o restante do código
 COPY . .
-
-# Instala dependências de build necessárias
-RUN npm install typescript @types/node critters --save-dev
-
-# Build
-RUN npx tsc --noEmit && mkdir -p public && npm run build
+RUN npm run build
 
 
 # =========================
-# ESTÁGIO 2: RUNNER (produção)
+# STAGE 2 — RUNNER
 # =========================
 FROM node:20-alpine AS runner
 
@@ -33,33 +22,12 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=80
 ENV HOSTNAME=0.0.0.0
-ENV NXT_SHARP=true
 
-# Para builds standalone do Next.js, as dependências necessárias já vão em .next/standalone
-# Portanto, não é necessário instalar dependências no runner
-
-# Ajusta permissões
-RUN chown -R node:node /app
-
-# Copia artefatos de build do estágio anterior
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.mjs ./
-COPY --from=builder /app/tsconfig.json ./
-COPY --from=builder /app/tailwind.config.js ./
-COPY --from=builder /app/postcss.config.js ./
+# Copia apenas o necessário
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
-# Instala libcap para permitir porta 80 sem root
-RUN apk add --no-cache libcap \
-    && setcap 'cap_net_bind_service=+ep' /usr/local/bin/node
-
-# Troca para usuário não-root
-USER node
-
-# Expõe porta
 EXPOSE 80
 
-# Comando para rodar
-CMD ["node", ".next/standalone/server.js"]
+CMD ["node", "server.js"]
