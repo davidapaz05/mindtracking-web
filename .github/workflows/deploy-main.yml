@@ -17,7 +17,12 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t mindtrack/mindtracking-web:latest .
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+            --build-arg NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}" \
+            --build-arg NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="${{ secrets.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET }}" \
+            -t mindtrack/mindtracking-web:latest .
 
       - name: Push Docker image
         run: docker push mindtrack/mindtracking-web:latest
@@ -47,7 +52,4 @@ jobs:
             --name mindtracking-web \
             --network mindtrack-net \
             -p 80:80 \
-            -e NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
-            -e NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}" \
-            -e NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="${{ secrets.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET }}" \
             mindtrack/mindtracking-web:latest
