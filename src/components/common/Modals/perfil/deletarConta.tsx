@@ -87,13 +87,13 @@ export default function DeleteAccountModal({
         </button>
 
         <div className="flex justify-center mb-2 mt-6">
-          <div className="w-14 h-14 flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <Image
-              src={icons.deletar}
+              src={theme === "dark" ? "/images/icons/Lixeira_white.svg" : "/images/icons/Lixeira_black.svg"}
               alt="Deletar"
               width={56}
               height={56}
-              className="w-14 h-14"
+              className="w-12 h-12 mb-2"
             />
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function DeleteAccountModal({
           <button
             type="button"
             onClick={onClose}
-            className={`px-6 py-2 rounded-full font-inter font-semibold transition-colors duration-200 hover:brightness-90 ${cancelBtnBg}`}
+            className={`px-8 py-2 rounded-full font-inter font-semibold transition-colors duration-200 hover:brightness-90 ${cancelBtnBg}`}
             disabled={deleteLoading}
           >
             Cancelar

@@ -33,28 +33,7 @@ const scrollToHeader = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) 
         </div>
 
         {/* Conteúdo principal */}
-        <div className="flex flex-col h-full md:grid md:grid-cols-3 lg:flex lg:flex-row w-full gap-6 mb-6 md:mb-0">
-          {/* Explore */}
-          <div className="flex flex-col space-y-4 w-full sm:w-full md:w-full lg:w-1/4">
-            <h2 className="font-semibold text-xl">Explore</h2>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-sm hover:text-blue-600">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-sm hover:text-blue-600">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-sm hover:text-blue-600">
-                  Questões
-                </a>
-              </li>
-            </ul>
-          </div>
+        <div className="flex flex-col h-full md:grid md:grid-cols-3 lg:flex lg:flex-row lg:justify-between w-full gap-6 mb-6 md:mb-0">
 
           {/* Contato */}
           <div className="flex flex-col space-y-4 w-full sm:w-full md:w-full lg:w-1/4">

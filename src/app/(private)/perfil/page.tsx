@@ -391,7 +391,7 @@ export default function PerfilPage() {
               <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">
                 E-mail
               </p>
-              <p className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
+              <p className={`text-lg email font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
                 {userData?.email ?? "—"}
               </p>
             </div>

@@ -268,10 +268,10 @@ export default function Sidebar({ onToggle }: { onToggle?: (open: boolean) => vo
                         handleLogoutClick();
                         setMobileOpen(false);
                       }}
-                      className={`flex items-center gap-3 p-3 mx-2 rounded-lg transition-colors whitespace-nowrap cursor-pointer
+                      className={`flex items-center gap-3 p-3 min-w-[95%] mx-2 rounded-lg transition-colors whitespace-nowrap cursor-pointer
                         ${theme === "dark" ? "text-gray-100 hover:bg-gray-700" : "text-[#0F172A] hover:bg-gray-100"}`}
                     >
-                      <span className="shrink-0 w-[80px] h-[80px] flex items-center justify-center">{item.icon}</span>
+                      <span className="shrink-0 flex items-center justify-center">{item.icon}</span>
                       <span
                         className={`font-semibold text-[17px] md:text-[22px] whitespace-nowrap ${theme === "dark" ? "text-white" : "text-gray-900"
                           }`}
