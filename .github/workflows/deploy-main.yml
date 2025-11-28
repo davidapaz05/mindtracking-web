@@ -40,7 +40,7 @@ jobs:
       - name: Stop and remove old container (if running)
         run: |
           docker stop mindtracking-web || true
-          docker rm mindtracking-web || true //
+          docker rm mindtracking-web || true 
 
       - name: Pull latest frontend image
         run: docker pull mindtrack/mindtracking-web:latest
