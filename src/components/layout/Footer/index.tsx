@@ -33,7 +33,7 @@ const scrollToHeader = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) 
         </div>
 
         {/* Conteúdo principal */}
-        <div className="flex flex-col h-full md:grid md:grid-cols-3 lg:flex lg:flex-row lg:justify-between w-full gap-6 mb-6 md:mb-0">
+        <div className="flex flex-col h-full md:flex-row lg:flex lg:flex-row md:items-center md:justify-between w-full gap-6 mb-6 md:mb-0">
 
           {/* Contato */}
           <div className="flex flex-col space-y-4 w-full sm:w-full md:w-full lg:w-1/4">
@@ -142,7 +142,7 @@ const scrollToHeader = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) 
           >
             <div
               className="
-                hidden sm:hidden md:flex
+                hidden lg:flex
                 justify-start
                 md:ml-0 lg:ml-0
               "
@@ -165,11 +165,11 @@ const scrollToHeader = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) 
             <div
               className="
                 flex flex-col items-start space-y-4 max-w-[400px] text-left
-                md:ml-auto md:pr-0 md:items-start md:-mt-20 
+                md:ml-auto md:pr-0 lg:items-start md:-mt-20 
                 lg:-ml-12 lg:-mt-16
               "
             >
-              <h2 className="text-2xl leading-snug font-semibold md:text-[18px] md:w-[280px] lg:w-auto md:ml-2 lg:text-[22px] md:mt-6">
+              <h2 className="text-2xl leading-snug font-semibold  md:text-[18px] md:w-[280px] lg:w-auto md:ml-2 lg:text-[22px] md:mt-6">
                 Pronto para conhecer seu
                 <br className="md:hidden" /> espaço emocional?
               </h2>

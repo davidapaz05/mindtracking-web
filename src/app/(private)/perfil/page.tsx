@@ -336,7 +336,17 @@ export default function PerfilPage() {
               onClick={() => setModalOpen(true)}
             >
               Editar Perfil
+            
             </button>
+
+            {/* Arrumar a função de exportar PDF */}
+            <button
+              className="w-full sm:flex-1 sm:min-w-[140px] md:min-w-[150px] lg:min-w-[160px] bg-yellow-600 px-4 md:px-6 h-9 rounded-full font-bold hover:bg-yellow-700 text-white whitespace-nowrap text-center text-sm md:text-base"
+              onClick={() => setModalOpen(true)}
+            >
+              Exportar PDF
+            </button> 
+            {/* Arrumar a função de exportar PDF */}
 
             <button
               onClick={handleResetPassword}
