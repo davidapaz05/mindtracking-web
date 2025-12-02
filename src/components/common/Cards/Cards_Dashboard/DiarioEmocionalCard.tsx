@@ -126,8 +126,8 @@ export default function DiarioEmocionalCard() {
 
   return (
     <>
-      <BaseCard>
-        <div className="flex flex-col justify-between h-full">
+      <BaseCard className="max-h-[550px] lg:h-full lg:min-h-0 w-full flex flex-col">
+        <div className="flex flex-col justify-between h-full min-h-0">
           {/* Cabeçalho */}
           <div className="flex items-center gap-4">
             <Image

@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Sidebar from "@/components/layout/Sidebar";
 import { useState, useEffect } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,7 +18,7 @@ const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
 
 export default function PerfilPage() {
   const { darkMode } = useTheme();
-  const { updateUserData } = useAuth();
+  const { updateUserData, fetchUserData } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteAccountModalOpen, setDeleteAccountModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,23 +55,58 @@ export default function PerfilPage() {
     }
   }, []);
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const resp = await dadosUser();
-        setUserData(resp?.user ?? null);
+  const loadUserData = async () => {
+    try {
+      const resp = await dadosUser();
+      setUserData(resp?.user ?? null);
 
-        if (resp?.user?.foto_perfil_url)
-          setFotoPerfilUrl(resp.user.foto_perfil_url);
-        if (resp?.user?.foto_fundo_url)
-          setFotoFundoUrl(resp.user.foto_fundo_url);
-      } catch (err) {
-        console.error("Erro ao carregar perfil:", err);
-        setUserData(null);
-      }
-    };
-    load();
+      if (resp?.user?.foto_perfil_url)
+        setFotoPerfilUrl(resp.user.foto_perfil_url);
+      if (resp?.user?.foto_fundo_url)
+        setFotoFundoUrl(resp.user.foto_fundo_url);
+    } catch (err) {
+      console.error("Erro ao carregar perfil:", err);
+      setUserData(null);
+    }
+  };
+
+  useEffect(() => {
+    loadUserData();
   }, []);
+
+  const handleProfileUpdateSuccess = async () => {
+    try {
+      // Recarrega os dados do usuário da API
+      const resp = await dadosUser();
+      const updatedUser = resp?.user ?? null;
+      
+      if (updatedUser) {
+        // Atualiza o estado local
+        setUserData(updatedUser);
+        
+        // Atualiza o contexto de autenticação com os novos dados
+        updateUserData({
+          nome: updatedUser.nome,
+          email: updatedUser.email,
+          data_nascimento: updatedUser.data_nascimento,
+          idade: updatedUser.idade,
+          telefone: updatedUser.telefone,
+          genero: updatedUser.genero,
+        });
+        
+        // Atualiza fotos se existirem
+        if (updatedUser.foto_perfil_url)
+          setFotoPerfilUrl(updatedUser.foto_perfil_url);
+        if (updatedUser.foto_fundo_url)
+          setFotoFundoUrl(updatedUser.foto_fundo_url);
+      }
+      
+      // Também atualiza o contexto via fetchUserData para garantir sincronização completa
+      await fetchUserData();
+    } catch (err) {
+      console.error("Erro ao atualizar dados após edição:", err);
+    }
+  };
 
   const handleAccountDeleted = () => {
     console.log("Conta deletada");
@@ -302,7 +336,17 @@ export default function PerfilPage() {
               onClick={() => setModalOpen(true)}
             >
               Editar Perfil
+            
             </button>
+
+            {/* Arrumar a função de exportar PDF */}
+            <button
+              className="w-full sm:flex-1 sm:min-w-[140px] md:min-w-[150px] lg:min-w-[160px] bg-yellow-600 px-4 md:px-6 h-9 rounded-full font-bold hover:bg-yellow-700 text-white whitespace-nowrap text-center text-sm md:text-base"
+              onClick={() => setModalOpen(true)}
+            >
+              Exportar PDF
+            </button> 
+            {/* Arrumar a função de exportar PDF */}
 
             <button
               onClick={handleResetPassword}
@@ -357,7 +401,7 @@ export default function PerfilPage() {
               <p className="text-base lg:text-lg font-semibold opacity-60 mb-2">
                 E-mail
               </p>
-              <p className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
+              <p className={`text-lg email font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
                 {userData?.email ?? "—"}
               </p>
             </div>
@@ -373,6 +417,7 @@ export default function PerfilPage() {
       <EditProfileModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
+        onSuccess={handleProfileUpdateSuccess}
       />
       <VerifyCodeModal
         isOpen={verifyCodeModalOpen}
@@ -397,17 +442,15 @@ export default function PerfilPage() {
   return (
     <div className="min-h-screen transition-colors duration-300 bg-transparent">
       <div className="sm:hidden fixed top-0 left-0 w-full z-50">
-        <Sidebar />
       </div>
 
       <div className="hidden sm:flex min-h-screen">
-        <Sidebar />
-        <div className="flex-1 flex items-center justify-center px-4 md:px-8 pt-10 md:pt-14 pb-10 md:justify-center ml-0 lg:ml-37.5">
+        <div className="flex-1 flex items-center justify-center px-4 md:px-8 pb-10 lg:pb-0 pt-10 lg:pt-0 md:justify-center ml-0 lg:ml-37.5">
           <div className="w-full max-w-5xl mx-auto">{ProfileCard}</div>
         </div>
       </div>
 
-      <div className="sm:hidden px-5 pb-6 pt-[88px] md:pt-3">{ProfileCard}</div>
+      <div className="sm:hidden px-5 pb-6 pt-6 md:pt-10 lg:pt-0">{ProfileCard}</div>
     </div>
   );
 }

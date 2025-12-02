@@ -211,7 +211,7 @@ export default function GraficoCard({ historicoData }: GraficoCardProps) {
   }
 
   return (
-    <BaseCard>
+    <BaseCard className="min-h-[280px] lg:h-full lg:min-h-0 w-full flex flex-col">
       <div className="mb-4 flex-shrink-0">
         <div className={`text-[20px] font-semibold ${mainText}`}>Seu Bem-Estar Essa Semana</div>
         <div className={`text-lg font-semibold ${mainText}`}>
@@ -227,7 +227,7 @@ export default function GraficoCard({ historicoData }: GraficoCardProps) {
           )}
         </div>
       </div>
-      <div className="flex-1 min-h-0 pb-4">
+      <div className="flex-1 min-h-[220px] lg:min-h-0 pb-4">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={dadosGrafico} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid

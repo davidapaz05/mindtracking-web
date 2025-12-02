@@ -34,8 +34,11 @@ api.interceptors.response.use(
       // limpeza local simples; você pode personalizar (ex.: refresh token)
       localStorage.removeItem("mt_token");
       setAuthToken(null);
-      // redireciona para login
-      window.location.href = "/login";
+      // redireciona para home (que tem o modal de login)
+      // só redireciona se não estiver já na home
+      if (window.location.pathname !== "/") {
+        window.location.href = "/";
+      }
     }
     return Promise.reject(error);
   }

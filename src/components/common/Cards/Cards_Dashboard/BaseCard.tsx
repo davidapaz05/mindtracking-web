@@ -18,7 +18,7 @@ export default function BaseCard({ children, className }: BaseCardProps) {
 
         pl-[20px] pr-[20px] pt-[20px]
 
-        w-full h-full flex flex-col min-h-[150px] max-w-[500px]
+        w-full flex flex-col
         transition-colors
         ${
           isDark

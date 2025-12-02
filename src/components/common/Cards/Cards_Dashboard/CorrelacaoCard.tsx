@@ -319,8 +319,8 @@ export default function CorrelacoesCard() {
   }
 
   return (
-    <BaseCard>
-      <div className="flex flex-col h-full">
+    <BaseCard className="min-h-[520px] lg:h-full lg:min-h-0 w-full flex flex-col">
+      <div className="flex flex-col h-full min-h-0">
         {/* Título */}
         <h1 className={`text-[20px] font-semibold mb-3 ${textColor}`}>
           Respostas frequentes:

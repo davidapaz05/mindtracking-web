@@ -25,9 +25,9 @@ export default function ModalAnalise({
   if (!isOpen || !analysis) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 px-4 py-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 px-3 sm:px-4 py-4 overflow-y-auto">
       <div
-        className={`p-6 rounded-2xl w-full max-w-[90vw] lg:max-w-[800px] relative shadow-xl transition-all duration-300 max-h-[90vh] overflow-y-auto
+        className={`p-4 sm:p-6 rounded-2xl w-full max-w-[95vw] sm:max-w-[90vw] lg:max-w-[800px] relative shadow-xl transition-all duration-300 max-h-[90vh] overflow-y-auto my-4
         ${
           theme === "dark" ? "bg-slate-900 text-white" : "bg-white text-gray-900"
         }`}
@@ -35,7 +35,8 @@ export default function ModalAnalise({
         {/* Botão fechar */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 cursor-pointer transition-colors p-1"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 cursor-pointer transition-colors p-1 z-10"
+          aria-label="Fechar modal"
         >
           <Image
             src={
@@ -46,11 +47,11 @@ export default function ModalAnalise({
             alt="Fechar"
             width={40}
             height={40}
-            className="w-10 h-10" // aumentei de 8/10 para 10
+            className="w-8 h-8 sm:w-10 sm:h-10"
           />
         </button>
 
-        <div className="flex flex-col items-center gap-6 text-center">
+        <div className="flex flex-col items-center gap-4 sm:gap-6 text-center mt-4 sm:mt-0">
           {/* Logo */}
           <Image
             src={
@@ -61,30 +62,30 @@ export default function ModalAnalise({
             alt="Logo Athena"
             width={72}
             height={72}
-            className="w-18 md:w-18"
+            className="w-16 h-16 sm:w-18 sm:h-18"
           />
 
           {/* Título */}
-          <h2 className="text-2xl md:text-3xl font-bold">Análise da Athena</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Análise da Athena</h2>
         </div>
 
         {/* Conteúdo */}
-        <div className="flex flex-col gap-4 mt-6 text-left">
+        <div className="flex flex-col gap-3 sm:gap-4 mt-4 sm:mt-6 text-left">
           <div className="break-words">
-            <p className="text-sm md:text-base leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base leading-relaxed">
               <span className="font-bold">Mensagem: </span>&quot;{analysis.message}&quot;
             </p>
           </div>
 
           <div className="break-words">
-            <p className="text-sm md:text-base">
+            <p className="text-xs sm:text-sm md:text-base">
               <span className="font-bold">Emoção predominante: </span>
               {analysis.emotion}
             </p>
           </div>
 
           <div className="break-words">
-            <p className="text-sm md:text-base">
+            <p className="text-xs sm:text-sm md:text-base">
               <span className="font-bold">Intensidade: </span>
               {analysis.intensity}
             </p>
@@ -93,7 +94,7 @@ export default function ModalAnalise({
           {/* Athena diz: com font-mixed */}
           <div className="break-words">
             <p
-              className={`text-sm md:text-base ${
+              className={`text-xs sm:text-sm md:text-base ${
                 theme === "dark" ? "text-blue-400" : "text-blue-600"
               }`}
             >

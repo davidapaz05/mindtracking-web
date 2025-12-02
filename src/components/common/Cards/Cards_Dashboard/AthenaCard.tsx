@@ -49,8 +49,8 @@ export default function ConverseAthenaCard() {
       : "Fale livremente sobre como está se sentindo, Athena está aqui para ouvir e apoiar você.";
 
   return (
-    <BaseCard>
-      <div className="flex flex-col justify-between h-full">
+    <BaseCard className="min-h-[150px] lg:h-full lg:min-h-0 w-full flex flex-col">
+      <div className="flex flex-col justify-between h-full min-h-0">
         {/* Cabeçalho */}
         <div className="flex items-center justify-between mb-3">
           <h1 className={`text-[20px] font-semibold ${textColor}`}>
