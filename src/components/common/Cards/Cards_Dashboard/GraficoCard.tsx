@@ -211,7 +211,7 @@ export default function GraficoCard({ historicoData }: GraficoCardProps) {
   }
 
   return (
-    <BaseCard className="min-h-[280px] lg:h-full lg:min-h-0 w-full flex flex-col">
+    <BaseCard className="min-h-[350px] md:min-h-[380px] lg:h-full lg:min-h-0 w-full flex flex-col">
       <div className="mb-4 flex-shrink-0">
         <div className={`text-[20px] font-semibold ${mainText}`}>Seu Bem-Estar Essa Semana</div>
         <div className={`text-lg font-semibold ${mainText}`}>
@@ -227,30 +227,31 @@ export default function GraficoCard({ historicoData }: GraficoCardProps) {
           )}
         </div>
       </div>
-      <div className="flex-1 min-h-[220px] lg:min-h-0 pb-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={dadosGrafico} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-            <CartesianGrid
-              stroke={isDark ? "rgba(59,130,246,0.15)" : "rgba(120,120,154,0.18)"}
-              vertical
-            />
-            <XAxis
-              dataKey="name"
-              stroke={axisColor}
-              interval={0}
-              tick={{ fontSize: 12, fontWeight: "regular", fill: axisColor }}
-              scale="point"
-              padding={{ left: 0, right: 0 }}
-              allowDuplicatedCategory={false}
-            />
-            <YAxis
-              stroke={axisColor}
-              domain={[0, 10]}
-              ticks={[0, 2, 4, 6, 8, 10]}
-              interval={0}
-              tick={{ fontSize: 12, fontWeight: "regular", fill: axisColor }}
-              width={22}
-            />
+      <div className="flex-1 min-h-[250px] md:min-h-[280px] lg:min-h-0 pb-4 w-full">
+        <div className="w-full h-[250px] md:h-[280px] lg:h-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={dadosGrafico} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
+              <CartesianGrid
+                stroke={isDark ? "rgba(59,130,246,0.15)" : "rgba(120,120,154,0.18)"}
+                vertical
+              />
+              <XAxis
+                dataKey="name"
+                stroke={axisColor}
+                interval={0}
+                tick={{ fontSize: 10, fontWeight: "regular", fill: axisColor }}
+                scale="point"
+                padding={{ left: 0, right: 0 }}
+                allowDuplicatedCategory={false}
+              />
+              <YAxis
+                stroke={axisColor}
+                domain={[0, 10]}
+                ticks={[0, 2, 4, 6, 8, 10]}
+                interval={0}
+                tick={{ fontSize: 10, fontWeight: "regular", fill: axisColor }}
+                width={30}
+              />
             <Tooltip
               contentStyle={{
                 backgroundColor: "#1e344e",
@@ -288,6 +289,7 @@ export default function GraficoCard({ historicoData }: GraficoCardProps) {
             />
           </LineChart>
         </ResponsiveContainer>
+        </div>
       </div>
     </BaseCard>
   );

@@ -372,7 +372,7 @@ export default function CorrelacoesCard() {
           {/* Conteúdo oculto para medir altura total (todas as correlações) */}
           <div
             ref={contentRef}
-            className={`space-y-4 text-[16px] font-semibold font-inter ${textColor} absolute opacity-0 pointer-events-none`}
+            className={`space-y-4 text-[16px] font-semibold font-inter mb-3 ${textColor} absolute opacity-0 pointer-events-none`}
             style={{ visibility: "hidden" }}
           >
             {correlacoes.map((correlacao, index) => (
@@ -403,7 +403,7 @@ export default function CorrelacoesCard() {
           {/* Conteúdo visível (apenas as correlações visíveis quando carrossel ativo) */}
           <div className="flex-1 flex items-center">
             <div
-              className={`space-y-4 text-[16px] font-semibold font-inter ${textColor} transition-opacity duration-300`}
+              className={`space-y-4 text-[16px] font-semibold font-inter mb-3 ${textColor} transition-opacity duration-300`}
             >
               {isCarouselActive
                 ? // Mostrar apenas as correlações visíveis quando carrossel está ativo

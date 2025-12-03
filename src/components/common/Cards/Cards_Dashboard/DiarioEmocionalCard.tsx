@@ -49,8 +49,8 @@ export default function   DiarioEmocionalCard() {
       : "bg-white border-green-600";
   const textColor = theme === "dark" ? "text-white" : "text-slate-800";
 
-  // Estados para o carrossel
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Estados para o carrossel - começa na página 1 (informações do diário)
+  const [currentIndex, setCurrentIndex] = useState(1);
   const [isCarouselActive, setIsCarouselActive] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -77,7 +77,7 @@ export default function   DiarioEmocionalCard() {
     // e mostramos sempre todo o conteúdo (texto + botão) em uma única coluna.
     if (typeof window !== "undefined" && window.innerWidth < 1024) {
       setIsCarouselActive(false);
-      setCurrentIndex(0);
+      setCurrentIndex(1);
       return;
     }
 
@@ -98,7 +98,7 @@ export default function   DiarioEmocionalCard() {
 
     // Reset do índice se não precisar mais do carrossel
     if (!hasOverflow) {
-      setCurrentIndex(0);
+      setCurrentIndex(1);
     }
   }, [entrada]);
 
@@ -332,7 +332,7 @@ export default function   DiarioEmocionalCard() {
                     {entrada.comentario_athena && (
                       <p>
                         <span className="font-semibold">Athena diz:</span>
-                        <br />"{entrada.comentario_athena}"
+                        <br />&quot;{entrada.comentario_athena}&quot;
                       </p>
                     )}
                   </div>
@@ -364,7 +364,7 @@ export default function   DiarioEmocionalCard() {
                         >
                           <p>
                             <span className="font-semibold">Athena diz:</span>
-                            <br />"{entrada.comentario_athena}"
+                            <br />&quot;{entrada.comentario_athena}&quot;
                           </p>
                         </div>
                       </div>
@@ -451,7 +451,7 @@ export default function   DiarioEmocionalCard() {
                         {entrada.comentario_athena && (
                           <p>
                             <span className="font-semibold">Athena diz:</span>
-                            <br />"{entrada.comentario_athena}"
+                            <br />&quot;{entrada.comentario_athena}&quot;
                           </p>
                         )}
                       </div>
