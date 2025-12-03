@@ -87,3 +87,11 @@ export const updateDadosUser = async (payload: {
   const { data } = await api.put("/auth/profile", payload);
   return data;
 };
+
+// Exporta PDF do perfil do usuário via GET em `export/pdf/:id`
+export const exportPerfilPdf = async (id: string | number) => {
+  const response = await api.get(`/export/pdf/${id}` as const, {
+    responseType: "blob",
+  });
+  return response.data as Blob;
+};
