@@ -66,7 +66,7 @@ export default function DeleteAccountModal({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+    <div className="fixed inset-0 flex items-center justify-center z-50 px-4 bg-black/60">
       <div
         className={`relative w-full max-w-lg px-4 sm:px-6 py-6 mx-auto rounded-lg sm:rounded-2xl text-center shadow-lg ${
           isDark ? "bg-slate-800" : "bg-slate-50"

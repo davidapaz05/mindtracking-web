@@ -73,6 +73,14 @@ export default function   DiarioEmocionalCard() {
 
   // Função para verificar se o conteúdo quebra o card
   const checkIfContentOverflows = useCallback(() => {
+    // Em telas menores que 1024px (mobile/tablet), desabilitamos o carrossel
+    // e mostramos sempre todo o conteúdo (texto + botão) em uma única coluna.
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setIsCarouselActive(false);
+      setCurrentIndex(0);
+      return;
+    }
+
     if (!containerRef.current || !contentRef.current || !entrada) {
       setIsCarouselActive(false);
       return;
@@ -247,7 +255,7 @@ export default function   DiarioEmocionalCard() {
 
   return (
     <>
-      <BaseCard className="max-h-[550px] lg:h-full lg:min-h-0 w-full flex flex-col">
+      <BaseCard className="lg:h-full lg:min-h-0 w-full flex flex-col">
         <div className="flex flex-col h-full min-h-0">
           {/* Cabeçalho com setas de navegação */}
           <div className="flex items-center justify-between mb-3">
@@ -342,8 +350,8 @@ export default function   DiarioEmocionalCard() {
               </div>
             </div>
 
-            {/* Conteúdo visível */}
-            <div className="flex flex-col justify-between h-full min-h-0 transition-opacity duration-300">
+          {/* Conteúdo visível */}
+          <div className="flex flex-col h-full min-h-0 transition-opacity duration-300">
               {entrada ? (
                 isCarouselActive && entrada.comentario_athena ? (
                   // Mostrar apenas a seção atual quando carrossel está ativo
@@ -363,33 +371,35 @@ export default function   DiarioEmocionalCard() {
                     )}
                     {currentIndex === 1 && (
                       // Seção 2: Informações do diário + botão
-                      <div className="flex-1 flex flex-col justify-between">
-                        <div
-                          className={`space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
-                        >
-                          <p>
-                            Último diário registrado:
-                            {entrada.titulo ? (
-                              <span className="font-normal">{entrada.titulo}</span>
-                            ) : (
-                              <span className="font-normal">Sem título</span>
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex-1 flex items-center">
+                          <div
+                            className={`space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
+                          >
+                            <p>
+                              Último diário registrado:
+                              {entrada.titulo ? (
+                                <span className="font-normal">{entrada.titulo}</span>
+                              ) : (
+                                <span className="font-normal">Sem título</span>
+                              )}
+                            </p>
+                            <p>{formatarDataHora(entrada.data_hora)}</p>
+                            {entrada.emocao_predominante && (
+                              <p>
+                                <span className="font-semibold">Emoção predominante:</span>{" "}
+                                {entrada.emocao_predominante}
+                              </p>
                             )}
-                          </p>
-                          <p>{formatarDataHora(entrada.data_hora)}</p>
-                          {entrada.emocao_predominante && (
-                            <p>
-                              <span className="font-semibold">Emoção predominante:</span>{" "}
-                              {entrada.emocao_predominante}
-                            </p>
-                          )}
-                          {entrada.intensidade_emocional && (
-                            <p>
-                              <span className="font-semibold">Intensidade emocional:</span>{" "}
-                              {entrada.intensidade_emocional}
-                            </p>
-                          )}
+                            {entrada.intensidade_emocional && (
+                              <p>
+                                <span className="font-semibold">Intensidade emocional:</span>{" "}
+                                {entrada.intensidade_emocional}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                        {/* Botão */}
+                        {/* Botão fixo embaixo */}
                         {diarioHoje ? (
                           <button
                             className="my-6 w-full h-[50px] bg-green-600 hover:bg-green-700 text-white font-bold text-[16px] py-2 rounded-3xl border-4 border-transparent transition-all duration-200 cursor-pointer active:scale-[0.98] active:brightness-95 active:border-green-900 active:drop-shadow-[0_0_15px_#383838]"
@@ -412,39 +422,41 @@ export default function   DiarioEmocionalCard() {
                   </>
                 ) : (
                   // Mostrar todo o conteúdo quando carrossel não está ativo
-                  <>
-                    <div
-                      className={`mt-4 space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
-                    >
-                      <p>
-                        Último diário registrado:
-                        {entrada.titulo ? (
-                          <span className="font-normal">{entrada.titulo}</span>
-                        ) : (
-                          <span className="font-normal">Sem título</span>
+                  <div className="flex-1 flex flex-col">
+                    <div className="flex-1 flex items-center">
+                      <div
+                        className={`mt-4 space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
+                      >
+                        <p>
+                          Último diário registrado:
+                          {entrada.titulo ? (
+                            <span className="font-normal">{entrada.titulo}</span>
+                          ) : (
+                            <span className="font-normal">Sem título</span>
+                          )}
+                        </p>
+                        <p>{formatarDataHora(entrada.data_hora)}</p>
+                        {entrada.emocao_predominante && (
+                          <p>
+                            <span className="font-semibold">Emoção predominante:</span>{" "}
+                            {entrada.emocao_predominante}
+                          </p>
                         )}
-                      </p>
-                      <p>{formatarDataHora(entrada.data_hora)}</p>
-                      {entrada.emocao_predominante && (
-                        <p>
-                          <span className="font-semibold">Emoção predominante:</span>{" "}
-                          {entrada.emocao_predominante}
-                        </p>
-                      )}
-                      {entrada.intensidade_emocional && (
-                        <p>
-                          <span className="font-semibold">Intensidade emocional:</span>{" "}
-                          {entrada.intensidade_emocional}
-                        </p>
-                      )}
-                      {entrada.comentario_athena && (
-                        <p>
-                          <span className="font-semibold">Athena diz:</span>
-                          <br />"{entrada.comentario_athena}"
-                        </p>
-                      )}
+                        {entrada.intensidade_emocional && (
+                          <p>
+                            <span className="font-semibold">Intensidade emocional:</span>{" "}
+                            {entrada.intensidade_emocional}
+                          </p>
+                        )}
+                        {entrada.comentario_athena && (
+                          <p>
+                            <span className="font-semibold">Athena diz:</span>
+                            <br />"{entrada.comentario_athena}"
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    {/* Botão */}
+                    {/* Botão fixo embaixo */}
                     {diarioHoje ? (
                       <button
                         className="my-6 w-full h-[50px] bg-green-600 hover:bg-green-700 text-white font-bold text-[16px] py-2 rounded-3xl border-4 border-transparent transition-all duration-200 cursor-pointer active:scale-[0.98] active:brightness-95 active:border-green-900 active:drop-shadow-[0_0_15px_#383838]"
@@ -462,7 +474,7 @@ export default function   DiarioEmocionalCard() {
                         Escrever no diário
                       </button>
                     )}
-                  </>
+                  </div>
                 )
               ) : (
                 <div className={`mt-4 text-[15px] font-inter ${textColor}`}>

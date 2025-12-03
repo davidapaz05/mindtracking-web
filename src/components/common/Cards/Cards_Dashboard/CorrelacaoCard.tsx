@@ -41,6 +41,14 @@ export default function CorrelacoesCard() {
 
   // Função para verificar se o conteúdo quebra o card e calcular quantos itens cabem
   const checkIfContentOverflows = useCallback(() => {
+    // Em telas menores que 1024px (mobile/tablet), desabilitamos o carrossel
+    // e deixamos todas as correlações empilhadas com espaçamento normal.
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setIsCarouselActive(false);
+      setItemsPerView(1);
+      return;
+    }
+
     if (!containerRef.current || !contentRef.current || correlacoes.length === 0) {
       setIsCarouselActive(false);
       setItemsPerView(1);
@@ -275,11 +283,11 @@ export default function CorrelacoesCard() {
   if (correlacoes.length === 0) {
     return (
       <BaseCard>
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full items-center justify-center text-center">
           <h1 className={`text-[20px] font-semibold mb-4 ${textColor}`}>
             Respostas frequentes:
           </h1>
-          <div className={`text-sm ${textColor} text-center py-8`}>
+          <div className={`text-sm ${textColor}`}>
             Nenhuma correlação encontrada ainda.
             <br />
             Responda mais questionários para ver padrões!
@@ -360,7 +368,7 @@ export default function CorrelacoesCard() {
         </div>
 
         {/* Container do carrossel */}
-        <div ref={containerRef} className="flex-1 overflow-hidden relative">
+        <div ref={containerRef} className="flex-1 overflow-hidden relative flex">
           {/* Conteúdo oculto para medir altura total (todas as correlações) */}
           <div
             ref={contentRef}
@@ -368,7 +376,7 @@ export default function CorrelacoesCard() {
             style={{ visibility: "hidden" }}
           >
             {correlacoes.map((correlacao, index) => (
-              <div key={`measure-${index}`} className="flex flex-col gap-2">
+              <div key={`measure-${index}`} className="flex flex-col gap-2 mb-2">
                 {/* Seção 1: Resposta da Athena (texto_pergunta) */}
                 {correlacao.texto_pergunta && (
                   <div
@@ -393,30 +401,59 @@ export default function CorrelacoesCard() {
           </div>
 
           {/* Conteúdo visível (apenas as correlações visíveis quando carrossel ativo) */}
-          <div
-            className={`space-y-4 text-[16px] font-semibold font-inter ${textColor} transition-opacity duration-300`}
-          >
-            {isCarouselActive
-              ? // Mostrar apenas as correlações visíveis quando carrossel está ativo
-                correlacoes
-                  .slice(currentIndex, currentIndex + itemsPerView)
-                  .map((correlacao, index) => (
+          <div className="flex-1 flex items-center">
+            <div
+              className={`space-y-4 text-[16px] font-semibold font-inter ${textColor} transition-opacity duration-300`}
+            >
+              {isCarouselActive
+                ? // Mostrar apenas as correlações visíveis quando carrossel está ativo
+                  correlacoes
+                    .slice(currentIndex, currentIndex + itemsPerView)
+                    .map((correlacao, index) => (
+                      <div
+                        key={currentIndex + index}
+                        ref={index === 0 ? itemRef : null}
+                        className="flex flex-col gap-2"
+                      >
+                        {/* Seção 1: Resposta da Athena (texto_pergunta) */}
+                        {correlacao.texto_pergunta && (
+                          <div
+                            className={`text-[14px] font-semibold ${textColor} mb-2`}
+                          >
+                            {correlacao.texto_pergunta}
+                          </div>
+                        )}
+
+                        {/* Seção 2: Outras informações (ícone + texto_alternativa) */}
+                        <div className="flex items-center gap-3 text-[15px] font-light">
+                          <Image
+                            src={correlacao.icone}
+                            alt={`Ícone ${correlacao.pontuacao ?? correlacao.texto_alternativa}`}
+                            width={20}
+                            height={20}
+                          />
+                          <span>{correlacao.texto_alternativa}</span>
+                        </div>
+                      </div>
+                    ))
+                : // Mostrar todas as correlações quando carrossel não está ativo
+                  correlacoes.map((correlacao, index) => (
                     <div
-                      key={currentIndex + index}
+                      key={index}
                       ref={index === 0 ? itemRef : null}
-                      className="flex flex-col gap-2"
+                      className="flex flex-col gap-2 mb-2"
                     >
                       {/* Seção 1: Resposta da Athena (texto_pergunta) */}
                       {correlacao.texto_pergunta && (
                         <div
-                          className={`text-[14px] font-semibold ${textColor} mb-2`}
+                          className={`text-[20px] font-semibold ${textColor} mb-2`}
                         >
                           {correlacao.texto_pergunta}
                         </div>
                       )}
 
                       {/* Seção 2: Outras informações (ícone + texto_alternativa) */}
-                      <div className="flex items-center gap-3 text-[15px] font-light">
+                      <div className="flex items-center gap-3 text-[18px] font-light">
                         <Image
                           src={correlacao.icone}
                           alt={`Ícone ${correlacao.pontuacao ?? correlacao.texto_alternativa}`}
@@ -426,35 +463,8 @@ export default function CorrelacoesCard() {
                         <span>{correlacao.texto_alternativa}</span>
                       </div>
                     </div>
-                  ))
-              : // Mostrar todas as correlações quando carrossel não está ativo
-                correlacoes.map((correlacao, index) => (
-                  <div
-                    key={index}
-                    ref={index === 0 ? itemRef : null}
-                    className="flex flex-col gap-2"
-                  >
-                    {/* Seção 1: Resposta da Athena (texto_pergunta) */}
-                    {correlacao.texto_pergunta && (
-                      <div
-                        className={`text-[20px] font-semibold ${textColor} mb-2`}
-                      >
-                        {correlacao.texto_pergunta}
-                      </div>
-                    )}
-
-                    {/* Seção 2: Outras informações (ícone + texto_alternativa) */}
-                    <div className="flex items-center gap-3 text-[18px] font-light">
-                      <Image
-                        src={correlacao.icone}
-                        alt={`Ícone ${correlacao.pontuacao ?? correlacao.texto_alternativa}`}
-                        width={20}
-                        height={20}
-                      />
-                      <span>{correlacao.texto_alternativa}</span>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+            </div>
           </div>
 
           {/* Indicador de posição - apenas quando o carrossel está ativo */}

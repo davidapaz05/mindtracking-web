@@ -101,6 +101,14 @@ export default function ConverseAthenaCard() {
   // Effect para verificar overflow quando o conteúdo muda
   useEffect(() => {
     if (!loading) {
+      // Em telas menores que 1024px (mobile/tablet), desabilitamos o carrossel
+      // e mostramos sempre texto + botão empilhados, sem setas.
+      if (typeof window !== "undefined" && window.innerWidth < 1024) {
+        setIsCarouselActive(false);
+        setCurrentIndex(0);
+        return;
+      }
+
       // Delay para garantir que o DOM foi renderizado
       const timeoutId = setTimeout(() => {
         checkIfContentOverflows();
@@ -250,7 +258,7 @@ export default function ConverseAthenaCard() {
           </div>
 
           {/* Conteúdo visível */}
-          <div className="flex flex-col justify-between h-full min-h-0 transition-opacity duration-300">
+          <div className="flex flex-col h-full min-h-0 transition-opacity duration-300">
             {isCarouselActive ? (
               // Mostrar apenas a seção atual quando carrossel está ativo
               <>
@@ -267,8 +275,8 @@ export default function ConverseAthenaCard() {
                   </div>
                 )}
                 {currentIndex === 1 && (
+                  // Slide apenas com o botão (sem texto em cima)
                   <div className="flex-1 flex items-center">
-                    {/* Botão */}
                     <a href="/athena" className="w-full">
                       <button
                         className={`
@@ -292,17 +300,19 @@ export default function ConverseAthenaCard() {
               </>
             ) : (
               // Mostrar todo o conteúdo quando carrossel não está ativo
-              <>
-                {/* Texto Dinâmico */}
-                <p className={`text-[15px] font-semibold font-inter mt-5 ${textColor}`}>
-                  {loading
-                    ? "Carregando..."
-                    : error
-                      ? "Fale livremente sobre como está se sentindo, Athena está aqui para ouvir e apoiar você."
-                      : textoConversa}
-                </p>
+              <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex items-center">
+                  {/* Texto Dinâmico centralizado */}
+                  <p className={`text-[15px] font-semibold font-inter mb-5 ${textColor}`}>
+                    {loading
+                      ? "Carregando..."
+                      : error
+                        ? "Fale livremente sobre como está se sentindo, Athena está aqui para ouvir e apoiar você."
+                        : textoConversa}
+                  </p>
+                </div>
 
-                {/* Botão */}
+                {/* Botão fixo embaixo */}
                 <a href="/athena">
                   <button
                     className={`
@@ -321,7 +331,7 @@ export default function ConverseAthenaCard() {
                     Comece Agora
                   </button>
                 </a>
-              </>
+              </div>
             )}
           </div>
         </div>
