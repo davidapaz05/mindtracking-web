@@ -9,7 +9,7 @@ import DeleteAccountModal from "@/components/common/Modals/perfil/deletarConta";
 import VerifyCodeModal from "@/components/features/Auth/RedefinicaoSenha/VerificacaoCodigo";
 import ResetPasswordModal from "@/components/features/Auth/RedefinicaoSenha/AtualizacaoSenha";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { dadosUser, recuperarSenha } from "@/lib/api/auth";
+import { dadosUser, recuperarSenha, exportPerfilPdf } from "@/lib/api/auth";
 import api from "@/lib/api/axios";
 
 const CLOUDINARY_UPLOAD_PRESET =
@@ -24,6 +24,7 @@ export default function PerfilPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [verifyCodeModalOpen, setVerifyCodeModalOpen] = useState(false);
   const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
   const [emailUser, setEmailUser] = useState("");
   const [userData, setUserData] = useState<{
     id?: number | string;
@@ -129,6 +130,39 @@ export default function PerfilPage() {
       console.error("Erro ao enviar código:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleExportPdf = async () => {
+    try {
+      setExportLoading(true);
+      const id = userData?.id;
+      if (!id) {
+        console.error("ID do usuário não disponível para exportação");
+        return;
+      }
+      const pdfBlob = await exportPerfilPdf(id);
+      const url = URL.createObjectURL(pdfBlob);
+
+      // 1) Abre visualização do PDF em nova aba
+      window.open(url, "_blank");
+
+      // 2) Em seguida, dispara o download do mesmo arquivo
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "perfil.pdf";
+      document.body.appendChild(a);
+      // pequena defasagem para garantir que a aba abra antes
+      setTimeout(() => {
+        a.click();
+        a.remove();
+        // Não revogar imediatamente para não quebrar a aba de visualização
+        setTimeout(() => URL.revokeObjectURL(url), 3000);
+      }, 200);
+    } catch (err) {
+      console.error("Erro ao exportar PDF do perfil:", err);
+    } finally {
+      setExportLoading(false);
     }
   };
 
@@ -339,14 +373,13 @@ export default function PerfilPage() {
             
             </button>
 
-            {/* Arrumar a função de exportar PDF */}
             <button
               className="w-full sm:flex-1 sm:min-w-[140px] md:min-w-[150px] lg:min-w-[160px] bg-yellow-600 px-4 md:px-6 h-9 rounded-full font-bold hover:bg-yellow-700 text-white whitespace-nowrap text-center text-sm md:text-base"
-              onClick={() => setModalOpen(true)}
+              onClick={handleExportPdf}
+              disabled={exportLoading}
             >
-              Exportar PDF
-            </button> 
-            {/* Arrumar a função de exportar PDF */}
+              {exportLoading ? "Exportando..." : "Exportar PDF"}
+            </button>
 
             <button
               onClick={handleResetPassword}
