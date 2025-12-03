@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import BaseCard from "./BaseCard";
 import ModalDiario from "@/components/common/Modals/Diario/ModalEscreverDiario";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { getDiarios, getDiarioById } from "@/lib/api/diario";
 import { setAuthToken } from "@/lib/api/axios";
@@ -36,7 +36,7 @@ interface DiarioCreated {
   intensidade?: string;
 }
 
-export default function DiarioEmocionalCard() {
+export default function   DiarioEmocionalCard() {
   const { theme } = useTheme();
   const [entrada, setEntrada] = useState<DiarioEntrada | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,6 +49,18 @@ export default function DiarioEmocionalCard() {
       : "bg-white border-green-600";
   const textColor = theme === "dark" ? "text-white" : "text-slate-800";
 
+  // Estados para o carrossel
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isCarouselActive, setIsCarouselActive] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Seções do conteúdo para o carrossel
+  const sections = [
+    { id: "athena-message", component: "athena-message" },
+    { id: "diary-info", component: "diary-info" },
+  ];
+
   // Formata data para "DD/MM às HHhMM"
   const formatarDataHora = (iso: string) => {
     const d = new Date(iso);
@@ -58,6 +70,50 @@ export default function DiarioEmocionalCard() {
     const min = String(d.getMinutes()).padStart(2, "0");
     return `${dia}/${mes} às ${hora}h${min}`;
   };
+
+  // Função para verificar se o conteúdo quebra o card
+  const checkIfContentOverflows = useCallback(() => {
+    if (!containerRef.current || !contentRef.current || !entrada) {
+      setIsCarouselActive(false);
+      return;
+    }
+
+    const container = containerRef.current;
+    const content = contentRef.current;
+
+    // Verificar se o conteúdo excede a altura do container
+    const contentHeight = content.scrollHeight;
+    const containerHeight = container.clientHeight;
+    const hasOverflow = contentHeight > containerHeight;
+
+    setIsCarouselActive(hasOverflow);
+
+    // Reset do índice se não precisar mais do carrossel
+    if (!hasOverflow) {
+      setCurrentIndex(0);
+    }
+  }, [entrada]);
+
+  // Função para avançar o carrossel
+  const nextSlide = useCallback(() => {
+    if (!isCarouselActive || sections.length === 0) return;
+
+    setCurrentIndex((prev) => {
+      const maxIndex = sections.length - 1;
+      const newIndex = prev < maxIndex ? prev + 1 : 0;
+      return newIndex;
+    });
+  }, [isCarouselActive, sections.length]);
+
+  // Função para retroceder o carrossel
+  const prevSlide = useCallback(() => {
+    if (!isCarouselActive || sections.length === 0) return;
+
+    setCurrentIndex((prev) => {
+      const newIndex = prev > 0 ? prev - 1 : sections.length - 1;
+      return newIndex;
+    });
+  }, [isCarouselActive, sections.length]);
 
   useEffect(() => {
     const fetchDiarios = async () => {
@@ -100,6 +156,27 @@ export default function DiarioEmocionalCard() {
     fetchDiarios();
   }, []);
 
+  // Effect para verificar overflow quando o conteúdo muda
+  useEffect(() => {
+    if (!loading && entrada) {
+      // Delay para garantir que o DOM foi renderizado
+      const timeoutId = setTimeout(() => {
+        checkIfContentOverflows();
+      }, 200);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [loading, entrada, checkIfContentOverflows]);
+
+  // Effect para detectar mudanças de tamanho da janela
+  useEffect(() => {
+    const handleResize = () => {
+      checkIfContentOverflows();
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [checkIfContentOverflows]);
+
   const [modalAberto, setModalAberto] = useState(false);
   const [textoDiario, setTextoDiario] = useState("");
   const [tituloDiario, setTituloDiario] = useState("");
@@ -124,84 +201,276 @@ export default function DiarioEmocionalCard() {
     );
   }
 
+  // Componente de seta
+  const ArrowButton = ({
+    direction,
+    onClick,
+    disabled,
+  }: {
+    direction: "left" | "right";
+    onClick: () => void;
+    disabled: boolean;
+  }) => {
+    const arrowColor = theme === "dark" ? "#F7F9FB" : "#1e293b";
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={`
+          flex items-center justify-center
+          w-8 h-8 rounded-full
+          transition-all duration-200
+          ${disabled ? "opacity-30 cursor-not-allowed" : "hover:bg-opacity-20 hover:bg-slate-400 cursor-pointer"}
+          ${theme === "dark" ? "hover:bg-white" : "hover:bg-slate-800"}
+        `}
+        aria-label={direction === "left" ? "Anterior" : "Próximo"}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={direction === "left" ? "rotate-90" : "-rotate-90"}
+        >
+          <path
+            d="M5 7.5L10 12.5L15 7.5"
+            stroke={arrowColor}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+    );
+  };
+
   return (
     <>
       <BaseCard className="max-h-[550px] lg:h-full lg:min-h-0 w-full flex flex-col">
-        <div className="flex flex-col justify-between h-full min-h-0">
-          {/* Cabeçalho */}
-          <div className="flex items-center gap-4">
-            <Image
-              src={
-                theme === "dark"
-                  ? "/images/icons/IconeDiario.svg"
-                  : "/images/icons/IconeDiarioDark.svg"
-              }
-              alt="Ícone Diário"
-              width={24}
-              height={24}
-              className="w-8 h-8"
-            />
-            <h1 className="text-[20px] font-semibold">Seu Diário Emocional</h1>
+        <div className="flex flex-col h-full min-h-0">
+          {/* Cabeçalho com setas de navegação */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-4">
+              <Image
+                src={
+                  theme === "dark"
+                    ? "/images/icons/IconeDiario.svg"
+                    : "/images/icons/IconeDiarioDark.svg"
+                }
+                alt="Ícone Diário"
+                width={24}
+                height={24}
+                className="w-8 h-8"
+              />
+              <h1 className={`text-[20px] font-semibold ${textColor}`}>
+                Seu Diário Emocional
+              </h1>
+            </div>
+
+            {/* Setas de navegação - apenas quando o carrossel está ativo */}
+            {isCarouselActive &&
+              entrada?.comentario_athena &&
+              sections.length > 1 && (
+                <div className="flex items-center gap-2">
+                  <ArrowButton
+                    direction="left"
+                    onClick={prevSlide}
+                    disabled={false}
+                  />
+                  <ArrowButton
+                    direction="right"
+                    onClick={nextSlide}
+                    disabled={false}
+                  />
+                </div>
+              )}
           </div>
-          {/* Conteúdo */}
-          {entrada ? (
+          {/* Container do carrossel */}
+          <div ref={containerRef} className="flex-1 overflow-hidden relative">
+            {/* Conteúdo oculto para medir altura total */}
             <div
-              className={`mt-4 space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
+              ref={contentRef}
+              className="absolute opacity-0 pointer-events-none"
+              style={{ visibility: "hidden" }}
             >
-              <p>
-                Último diário registrado:
-                {entrada.titulo ? (
-                  <span className="font-normal">{entrada.titulo}</span>
+              <div className="flex flex-col justify-between h-full min-h-0">
+                {/* Conteúdo completo para medir */}
+                {entrada ? (
+                  <div
+                    className={`mt-4 space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
+                  >
+                    <p>
+                      Último diário registrado:
+                      {entrada.titulo ? (
+                        <span className="font-normal">{entrada.titulo}</span>
+                      ) : (
+                        <span className="font-normal">Sem título</span>
+                      )}
+                    </p>
+                    <p>{formatarDataHora(entrada.data_hora)}</p>
+                    {entrada.emocao_predominante && (
+                      <p>
+                        <span className="font-semibold">Emoção predominante:</span>{" "}
+                        {entrada.emocao_predominante}
+                      </p>
+                    )}
+                    {entrada.intensidade_emocional && (
+                      <p>
+                        <span className="font-semibold">Intensidade emocional:</span>{" "}
+                        {entrada.intensidade_emocional}
+                      </p>
+                    )}
+                    {entrada.comentario_athena && (
+                      <p>
+                        <span className="font-semibold">Athena diz:</span>
+                        <br />"{entrada.comentario_athena}"
+                      </p>
+                    )}
+                  </div>
                 ) : (
-                  <span className="font-normal">Sem título</span>
+                  <div className={`mt-4 text-[15px] font-inter ${textColor}`}>
+                    Nenhuma entrada registrada.
+                  </div>
                 )}
-              </p>
-              <p>{formatarDataHora(entrada.data_hora)}</p>
-              {entrada.emocao_predominante && (
-                <p>
-                  <span className="font-semibold">Emoção predominante:</span>{" "}
-                  {entrada.emocao_predominante}
-                </p>
-              )}
-              {entrada.intensidade_emocional && (
-                <p>
-                  <span className="font-semibold">Intensidade emocional:</span>{" "}
-                  {entrada.intensidade_emocional}
-                </p>
-              )}
-              {entrada.comentario_athena && (
-                <p>
-                  <span className="font-semibold">Athena diz:</span>
-                  <br />“{entrada.comentario_athena}”
-                </p>
+                {/* Botão para medir */}
+                {diarioHoje ? (
+                  <button className="my-6 w-full h-[50px]">Diário já registrado</button>
+                ) : (
+                  <button className="my-6 w-full h-[50px]">Escrever no diário</button>
+                )}
+              </div>
+            </div>
+
+            {/* Conteúdo visível */}
+            <div className="flex flex-col justify-between h-full min-h-0 transition-opacity duration-300">
+              {entrada ? (
+                isCarouselActive && entrada.comentario_athena ? (
+                  // Mostrar apenas a seção atual quando carrossel está ativo
+                  <>
+                    {currentIndex === 0 && (
+                      // Seção 1: Mensagem da Athena (sozinha)
+                      <div className="flex-1 flex items-center">
+                        <div
+                          className={`space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
+                        >
+                          <p>
+                            <span className="font-semibold">Athena diz:</span>
+                            <br />"{entrada.comentario_athena}"
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    {currentIndex === 1 && (
+                      // Seção 2: Informações do diário + botão
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div
+                          className={`space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
+                        >
+                          <p>
+                            Último diário registrado:
+                            {entrada.titulo ? (
+                              <span className="font-normal">{entrada.titulo}</span>
+                            ) : (
+                              <span className="font-normal">Sem título</span>
+                            )}
+                          </p>
+                          <p>{formatarDataHora(entrada.data_hora)}</p>
+                          {entrada.emocao_predominante && (
+                            <p>
+                              <span className="font-semibold">Emoção predominante:</span>{" "}
+                              {entrada.emocao_predominante}
+                            </p>
+                          )}
+                          {entrada.intensidade_emocional && (
+                            <p>
+                              <span className="font-semibold">Intensidade emocional:</span>{" "}
+                              {entrada.intensidade_emocional}
+                            </p>
+                          )}
+                        </div>
+                        {/* Botão */}
+                        {diarioHoje ? (
+                          <button
+                            className="my-6 w-full h-[50px] bg-green-600 hover:bg-green-700 text-white font-bold text-[16px] py-2 rounded-3xl border-4 border-transparent transition-all duration-200 cursor-pointer active:scale-[0.98] active:brightness-95 active:border-green-900 active:drop-shadow-[0_0_15px_#383838]"
+                            onClick={() => setModalAberto(true)}
+                          >
+                            Diário já registrado
+                          </button>
+                        ) : (
+                          <button
+                            className="my-6 w-full h-[50px] bg-blue-600 hover:bg-blue-500 text-white font-bold text-[16px] py-2 rounded-3xl border-4 border-transparent transition-all duration-200 cursor-pointer active:scale-[0.98] active:brightness-95 active:border-blue-700 active:drop-shadow-[0_0_15px_#0C4A6E]"
+                            onClick={() => {
+                              router.push("/diario?openModal=1");
+                            }}
+                          >
+                            Escrever no diário
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  // Mostrar todo o conteúdo quando carrossel não está ativo
+                  <>
+                    <div
+                      className={`mt-4 space-y-2 text-[15px] font-semibold font-inter ${textColor}`}
+                    >
+                      <p>
+                        Último diário registrado:
+                        {entrada.titulo ? (
+                          <span className="font-normal">{entrada.titulo}</span>
+                        ) : (
+                          <span className="font-normal">Sem título</span>
+                        )}
+                      </p>
+                      <p>{formatarDataHora(entrada.data_hora)}</p>
+                      {entrada.emocao_predominante && (
+                        <p>
+                          <span className="font-semibold">Emoção predominante:</span>{" "}
+                          {entrada.emocao_predominante}
+                        </p>
+                      )}
+                      {entrada.intensidade_emocional && (
+                        <p>
+                          <span className="font-semibold">Intensidade emocional:</span>{" "}
+                          {entrada.intensidade_emocional}
+                        </p>
+                      )}
+                      {entrada.comentario_athena && (
+                        <p>
+                          <span className="font-semibold">Athena diz:</span>
+                          <br />"{entrada.comentario_athena}"
+                        </p>
+                      )}
+                    </div>
+                    {/* Botão */}
+                    {diarioHoje ? (
+                      <button
+                        className="my-6 w-full h-[50px] bg-green-600 hover:bg-green-700 text-white font-bold text-[16px] py-2 rounded-3xl border-4 border-transparent transition-all duration-200 cursor-pointer active:scale-[0.98] active:brightness-95 active:border-green-900 active:drop-shadow-[0_0_15px_#383838]"
+                        onClick={() => setModalAberto(true)}
+                      >
+                        Diário já registrado
+                      </button>
+                    ) : (
+                      <button
+                        className="my-6 w-full h-[50px] bg-blue-600 hover:bg-blue-500 text-white font-bold text-[16px] py-2 rounded-3xl border-4 border-transparent transition-all duration-200 cursor-pointer active:scale-[0.98] active:brightness-95 active:border-blue-700 active:drop-shadow-[0_0_15px_#0C4A6E]"
+                        onClick={() => {
+                          router.push("/diario?openModal=1");
+                        }}
+                      >
+                        Escrever no diário
+                      </button>
+                    )}
+                  </>
+                )
+              ) : (
+                <div className={`mt-4 text-[15px] font-inter ${textColor}`}>
+                  Nenhuma entrada registrada.
+                </div>
               )}
             </div>
-          ) : (
-            <div className={`mt-4 text-[15px] font-inter ${textColor}`}>
-              Nenhuma entrada registrada.
-            </div>
-          )}
-          {/* Botão */}
-          {diarioHoje ? (
-            <button
-              className="my-6 w-full h-[50px] bg-green-600 hover:bg-green-700 text-white font-bold text-[16px] py-2 rounded-3xl border-4 border-transparent transition-all duration-200 cursor-pointer active:scale-[0.98] active:brightness-95 active:border-green-900 active:drop-shadow-[0_0_15px_#383838]"
-              onClick={() => setModalAberto(true)}
-            >
-              Diário já registrado
-            </button>
-          ) : (
-            <>
-              <button
-                className="my-6 w-full h-[50px] bg-blue-600 hover:bg-blue-500 text-white font-bold text-[16px] py-2 rounded-3xl border-4 border-transparent transition-all duration-200 cursor-pointer active:scale-[0.98] active:brightness-95 active:border-blue-700 active:drop-shadow-[0_0_15px_#0C4A6E]"
-                onClick={() => {
-                  // Primeiro navega para a página de diários e inclui query param para abrir o modal lá
-                  router.push("/diario?openModal=1");
-                }}
-              >
-                Escrever no diário
-              </button>
-            </>
-          )}
+          </div>
         </div>
       </BaseCard>
       {/* Modal(es) */}
