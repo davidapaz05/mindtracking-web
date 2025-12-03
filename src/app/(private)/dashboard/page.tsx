@@ -67,8 +67,8 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="ml-0 lg:ml-[150px] h-screen overflow-hidden">
-      <div className="ml-0 lg:ml-[50px] flex flex-col h-full min-h-0 pb-10 lg:pb-0">
+    <div className="ml-0 lg:ml-[150px] min-h-screen lg:h-screen overflow-y-auto lg:overflow-hidden">
+      <div className="ml-0 lg:ml-[50px] flex flex-col h-full min-h-0 pb-5 lg:pb-0">
         <div className="flex-shrink-0">
           <h2 className="text-[30px] font-semibold mb-2 mt-2 ml-6 md:ml-0 md:text-center lg:text-start">
             Seu resumo de saúde mental semanal
@@ -85,7 +85,8 @@ export default function Dashboard() {
           <RecomendacoesCard />
         </div>
 
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 max-w-[92%] mx-auto lg:mx-0 my-4 lg:my-4 lg:max-w-[98%] min-h-0 overflow-hidden">
+        {/* Segunda linha de cards (gráfico, diário, correlações, Athena) */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 max-w-[92%] mx-auto lg:mx-0 my-4 lg:my-4 lg:max-w-[98%] lg:flex-1 lg:min-h-0 lg:overflow-hidden">
           <div className="h-full min-h-0">
             <GraficoCard historicoData={historicoData} />
           </div>
@@ -93,11 +94,11 @@ export default function Dashboard() {
             <DiarioEmocionalCard />
           </div>
 
-          <div className="flex flex-col h-full min-h-0 justify-between gap-4 md:gap-6 pb-10 lg:pb-0">
-            <div className="flex-1 min-h-0">
+          <div className="flex flex-col gap-4 md:gap-6 lg:h-full lg:min-h-0 lg:justify-between">
+            <div className="lg:flex-1 lg:min-h-0">
               <CorrelacaoCard />
             </div>
-            <div className="flex-1 min-h-0">
+            <div className="lg:flex-1 lg:min-h-0">
               <AthenaCard />
             </div>
           </div>

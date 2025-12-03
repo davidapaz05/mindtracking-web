@@ -113,10 +113,6 @@ export default function EditProfileModal({
   if (!isOpen) return null;
 
   const icons = {
-    logo:
-      theme === "dark"
-        ? "/images/icons/logo_branca.svg"
-        : "/images/icons/logo_p.svg",
     nome:
       theme === "dark" ? "/images/icons/nome.svg" : "/images/icons/nome_p.svg",
     data:
@@ -180,9 +176,8 @@ export default function EditProfileModal({
 
       {/* Modal */}
       <div
-        className={`relative w-full max-w-xl mx-auto p-6 rounded-2xl shadow-lg ${
-          theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"
-        }`}
+        className={`relative w-full max-w-xl mx-auto p-6 rounded-2xl shadow-lg ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+          }`}
       >
         <button
           onClick={onClose}
@@ -200,7 +195,11 @@ export default function EditProfileModal({
 
         <div className="flex flex-col items-center mb-6 mt-6">
           <Image
-            src={icons.logo}
+            src={
+              theme === "dark"
+                ? "../images/icons/Logo_branca.svg"
+                : "../images/icons/Logo-slate-900.svg"
+            }
             alt="Ícone"
             width={64}
             height={64}

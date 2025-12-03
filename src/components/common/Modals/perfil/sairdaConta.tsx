@@ -36,8 +36,8 @@ export default function LogoutModal({
   const descriptionColor = isDark ? "text-gray-300" : "text-gray-500";
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
-      {/* Modal sem cor de fundo explícita, acompanha o background da tela */}
+    <div className="fixed inset-0 flex items-center justify-center z-50 px-4 bg-black/60">
+      {/* Modal */}
       <div
         className={
           `relative w-full max-w-lg px-4 sm:px-6 py-6 mx-auto rounded-lg sm:rounded-2xl text-center shadow-lg ` +

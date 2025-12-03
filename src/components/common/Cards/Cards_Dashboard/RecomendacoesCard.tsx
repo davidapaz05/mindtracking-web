@@ -70,7 +70,7 @@ export default function RecomendacoesCard({ recomendacao }: RecomendacoesCardPro
           className="w-9 h-auto"
         />
       </div>
-      <p className={`mt-2 text-[15px] font-medium ${secondaryText}`}>
+      <p className={`mt-2 mb-3 text-[15px] font-medium ${secondaryText}`}>
         {recomendacao
           ? recomendacao
           : loading
